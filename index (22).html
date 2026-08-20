@@ -1,0 +1,1647 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kiel Dashboard – Wetter & Nachrichten</title>
+
+<style>
+:root {
+    --bg: #eef2f6;
+    --card: rgba(255,255,255,.92);
+    --card2: rgba(255,255,255,.72);
+    --text: #111827;
+    --muted: #667085;
+    --line: rgba(15,23,42,.09);
+    --accent: #1677ff;
+    --accent2: #0f5fd1;
+    --ticker: #0b1220;
+    --shadow: 0 18px 50px rgba(15,23,42,.08);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #080d14;
+        --card: rgba(20,28,39,.94);
+        --card2: rgba(31,41,55,.72);
+        --text: #f5f7fa;
+        --muted: #a3adba;
+        --line: rgba(255,255,255,.09);
+        --accent: #55a0ff;
+        --accent2: #2d82ef;
+        --ticker: #03070d;
+        --shadow: 0 18px 50px rgba(0,0,0,.28);
+    }
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+    margin: 0;
+    min-height: 100%;
+}
+
+body {
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+    background:
+        radial-gradient(circle at 15% 0%, rgba(22,119,255,.10), transparent 32%),
+        var(--bg);
+    color: var(--text);
+}
+
+button {
+    font: inherit;
+}
+
+.dashboard {
+    width: min(1500px, 94vw);
+    margin: 0 auto;
+    padding: 28px 0 90px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 22px;
+}
+
+.brand {
+    font-size: clamp(1.45rem, 2.5vw, 2.2rem);
+    font-weight: 850;
+    letter-spacing: -.04em;
+}
+
+.subtitle {
+    color: var(--muted);
+    margin-top: 4px;
+}
+
+.clock-wrap {
+    text-align: right;
+}
+
+.clock {
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    font-weight: 800;
+    letter-spacing: -.03em;
+}
+
+.date {
+    color: var(--muted);
+    margin-top: 2px;
+}
+
+.weather-grid {
+    display: grid;
+    grid-template-columns: 1.15fr .85fr;
+    gap: 18px;
+    margin-bottom: 18px;
+    align-items: stretch;
+}
+
+.card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 26px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(18px);
+}
+
+.current {
+    padding: 28px;
+    min-height: 360px;
+    height: 100%;
+}
+
+.location-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+}
+
+.location {
+    color: var(--muted);
+    font-weight: 650;
+}
+
+.refresh-btn {
+    border: 1px solid var(--line);
+    background: var(--card2);
+    color: var(--text);
+    padding: 8px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.refresh-btn:hover {
+    border-color: var(--accent);
+}
+
+.current-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-top: 14px;
+}
+
+.temperature {
+    font-size: clamp(4.5rem, 8vw, 7rem);
+    line-height: .9;
+    font-weight: 850;
+    letter-spacing: -.075em;
+}
+
+.description {
+    font-size: 1.3rem;
+    margin-top: 14px;
+    font-weight: 650;
+}
+
+.weather-icon {
+    font-size: clamp(4rem, 8vw, 7rem);
+}
+
+.details {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 28px;
+}
+
+.detail {
+    background: var(--card2);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 13px;
+}
+
+.detail-label {
+    color: var(--muted);
+    font-size: .78rem;
+}
+
+.detail-value {
+    margin-top: 4px;
+    font-weight: 800;
+}
+
+.forecast {
+    padding: 24px;
+    overflow: hidden;
+    min-width: 0;
+    min-height: 360px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.section-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.section-title h2 {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+.section-title span {
+    color: var(--muted);
+    font-size: .72rem;
+    white-space: nowrap;
+    opacity: .8;
+}
+
+.forecast-list {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(54px, 1fr));
+    grid-template-rows: repeat(2, minmax(120px, 1fr));
+    gap: 9px;
+    flex: 1;
+    align-content: stretch;
+}
+
+.forecast-day {
+    min-width: 0;
+    min-height: 0;
+    padding: 11px 7px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.forecast-day.today {
+    outline: 2px solid var(--accent);
+}
+
+.day-name {
+    font-weight: 800;
+    font-size: .78rem;
+}
+
+.day-icon {
+    font-size: 1.9rem;
+    margin: 9px 0;
+}
+
+.day-temp {
+    font-weight: 800;
+    font-size: .9rem;
+}
+
+.day-rain {
+    color: var(--muted);
+    font-size: .7rem;
+    margin-top: 5px;
+}
+
+.currency-card {
+    padding: 22px 24px;
+    margin-bottom: 18px;
+}
+
+ .currency-trend {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+}
+.trend-title {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+    color: var(--muted);
+    font-size: .75rem;
+    font-weight: 750;
+}
+.trend-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+.trend-item {
+    background: var(--card2);
+    border: 1px solid var(--line);
+    border-radius: 13px;
+    padding: 9px 10px;
+}
+.trend-name { color: var(--muted); font-size: .68rem; font-weight: 750; }
+.trend-line {
+    width: 100%;
+    height: 48px;
+    margin: 4px 0;
+    padding: 3px 0;
+    border-radius: 7px;
+    background-image:
+        linear-gradient(to right, rgba(255,255,255,.07) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,.07) 1px, transparent 1px);
+    background-size: 25% 50%;
+    background-position: center;
+}
+.trend-value { font-size: .72rem; font-weight: 850; }
+.trend-up { color: #31c48d; }
+.trend-down { color: #ef6b73; }
+.trend-flat { color: var(--muted); }
+@media (max-width: 700px) {
+    .trend-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.currency-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.currency-item {
+    background: var(--card2);
+    border: 1px solid var(--line);
+    border-radius: 15px;
+    padding: 14px;
+}
+
+.currency-name {
+    color: var(--muted);
+    font-size: .76rem;
+    font-weight: 700;
+}
+
+.currency-rate {
+    margin-top: 6px;
+    font-size: 1.2rem;
+    font-weight: 850;
+}
+
+.currency-time {
+    margin-top: 4px;
+    color: var(--muted);
+    font-size: .68rem;
+}
+
+@media (max-width: 700px) {
+    .currency-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.news-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+
+.news-card {
+    padding: 24px;
+    min-height: 0;
+}
+
+.news-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 14px;
+}
+
+.news-head h2 {
+    margin: 0;
+    font-size: 1.3rem;
+}
+
+.badge {
+    color: var(--accent);
+    font-size: .72rem;
+    font-weight: 850;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+}
+
+.news-item {
+    padding: 13px 0;
+    border-bottom: 1px solid var(--line);
+}
+
+.news-item:last-child {
+    border-bottom: 0;
+}
+
+.news-image {
+    display: block;
+    width: 100%;
+    height: 125px;
+    object-fit: cover;
+    border-radius: 14px;
+    margin-bottom: 10px;
+    background: var(--card2);
+}
+
+.news-link {
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 700;
+    line-height: 1.42;
+}
+
+.news-link:hover {
+    color: var(--accent);
+}
+
+.news-date {
+    color: var(--muted);
+    font-size: .72rem;
+    margin-top: 6px;
+}
+
+.loading, .error {
+    color: var(--muted);
+    padding: 22px 0;
+}
+
+.error {
+    color: #d04a4a;
+}
+
+.source-note {
+    margin-top: 8px;
+    color: var(--muted);
+    font-size: .72rem;
+}
+
+
+.footer {
+    color: var(--muted);
+    text-align: center;
+    font-size: .7rem;
+    margin-top: 18px;
+}
+
+@media (max-width: 1050px) {
+    .weather-grid { grid-template-columns: 1fr; }
+    .current,
+    .forecast { min-height: 0; height: auto; }
+    .forecast { height: auto; min-height: 0; }
+    .current { min-height: 0; }
+    .forecast-list {
+        grid-template-columns: repeat(7, minmax(70px, 1fr));
+        overflow-x: auto;
+    }
+    .forecast-day {
+        min-width: 70px;
+        min-height: 118px;
+    }
+}
+
+@media (max-width: 700px) {
+    .dashboard { width: 92vw; padding-top: 18px; }
+    .header { align-items: flex-start; }
+    .clock-wrap { text-align: right; }
+    .current-main { align-items: flex-start; }
+    .details { grid-template-columns: 1fr; }
+    .news-grid { grid-template-columns: 1fr; }
+    .weather-icon { font-size: 4rem; }
+    .ticker { height: 44px; }
+    .ticker-label { padding: 0 12px; }
+}
+
+.kompakt-card {
+    margin-top: 18px;
+    padding: 24px;
+}
+
+.kompakt-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.kompakt-item {
+    background: var(--card2);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 16px;
+}
+
+.kompakt-label {
+    color: var(--muted);
+    font-size: .75rem;
+    font-weight: 700;
+}
+
+.kompakt-value {
+    margin-top: 7px;
+    font-size: 1.25rem;
+    font-weight: 850;
+}
+
+.kompakt-sub {
+    margin-top: 3px;
+    color: var(--muted);
+    font-size: .7rem;
+}
+
+@media (max-width: 700px) {
+    .kompakt-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+
+.extra-card {
+    margin-top: 18px;
+    padding: 24px;
+}
+
+.extra-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.extra-item {
+    display: block;
+    text-decoration: none;
+    color: var(--text);
+    background: var(--card2);
+    border: 1px solid var(--line);
+    border-radius: 17px;
+    padding: 17px;
+    transition: transform .18s ease, border-color .18s ease, background .18s ease;
+}
+
+.extra-item:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent);
+}
+
+.extra-icon {
+    font-size: 1.7rem;
+    margin-bottom: 8px;
+}
+
+.extra-title {
+    font-weight: 850;
+    font-size: .98rem;
+}
+
+.extra-text {
+    color: var(--muted);
+    font-size: .74rem;
+    line-height: 1.4;
+    margin-top: 4px;
+}
+
+@media (max-width: 700px) {
+    .extra-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+
+.news-strip {
+    margin-top: 18px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    background: rgba(10,17,28,.95);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+}
+
+.news-strip-label {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    flex: 0 0 auto;
+    padding: 0 14px;
+    background: var(--accent2);
+    color: white;
+    font-size: .72rem;
+    font-weight: 900;
+    letter-spacing: .05em;
+}
+
+.news-strip-text {
+    padding: 0 16px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--text);
+    font-size: .75rem;
+    font-weight: 650;
+}
+
+
+
+
+
+
+
+
+
+
+
+.kvg-row:last-child {
+    border-bottom: 0;
+}
+
+
+
+.kvg-header > div:first-child {
+    border-left: 0;
+}
+
+
+
+
+
+@media (max-width: 700px) {
+    .kvg-board-head { padding: 15px 14px 10px; }
+    .kvg-table { padding: 6px 10px; }
+    .kvg-row {
+        grid-template-columns: 62px 1fr 84px;
+        font-size: .8rem;
+        min-height: 43px;
+    }
+    .kvg-board-footer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+.kvg-row:last-child {
+    border-bottom: 0;
+}
+
+.kvg-row > div {
+    padding: 0 13px;
+}
+
+
+.kvg-header > div:last-child {
+    text-align: right;
+}
+
+
+
+.kvg-loading,
+
+
+
+
+@media (max-width: 700px) {
+    .kvg-board {
+        padding: 18px 14px 14px;
+    }
+
+    .kvg-row {
+        grid-template-columns: 62px 1fr 90px;
+    }
+
+    .kvg-row > div {
+        padding: 0 9px;
+    }
+
+    .kvg-board-footer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+
+.kvg-live-card {
+    margin-top: 18px;
+    padding: 22px 24px 16px;
+}
+
+.kvg-live-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 14px;
+}
+
+.kvg-live-title {
+    font-size: 1.35rem;
+    font-weight: 850;
+}
+
+.kvg-live-subtitle {
+    color: var(--muted);
+    font-size: .74rem;
+    margin-top: 3px;
+}
+
+.kvg-live-badge {
+    color: #31c48d;
+    border: 1px solid rgba(49,196,141,.25);
+    background: rgba(49,196,141,.08);
+    border-radius: 999px;
+    padding: 7px 10px;
+    font-size: .68rem;
+    font-weight: 900;
+    white-space: nowrap;
+}
+
+.kvg-live-frame-wrap {
+    height: 560px;
+    border: 1px solid var(--line);
+    border-radius: 15px;
+    overflow: hidden;
+    background: var(--card2);
+}
+
+.kvg-live-frame {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+    background: #fff;
+}
+
+.kvg-live-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding-top: 11px;
+    color: var(--muted);
+    font-size: .67rem;
+}
+
+.kvg-live-footer a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+@media (max-width: 700px) {
+    .kvg-live-card {
+        padding: 18px 14px 14px;
+    }
+
+    .kvg-live-frame-wrap {
+        height: 430px;
+    }
+
+    .kvg-live-footer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <header class="header">
+        <div>
+            <div class="brand">NORDBLICK</div>
+            <div class="subtitle">Kiel · Wetter · Nachrichten</div>
+        </div>
+
+        <div class="clock-wrap">
+            <div class="clock" id="clock">--:--</div>
+            <div class="date" id="date">--</div>
+        </div>
+    </header>
+
+    <!-- WETTER -->
+
+    <section class="weather-grid">
+
+        <div class="card current">
+
+            <div class="location-row">
+                <div class="location" id="location">
+                    Kiel, Schleswig-Holstein
+                </div>
+
+                <button class="refresh-btn" id="refreshBtn" type="button">
+                    Aktualisieren
+                </button>
+            </div>
+
+            <div class="current-main">
+
+                <div>
+                    <div class="temperature" id="temperature">--°</div>
+                    <div class="description" id="description">
+                        Wetter wird geladen...
+                    </div>
+                </div>
+
+                <div class="weather-icon" id="weatherIcon">
+                    🌤️
+                </div>
+
+            </div>
+
+            <div class="details">
+
+                <div class="detail">
+                    <div class="detail-label">Gefühlt</div>
+                    <div class="detail-value" id="feelsLike">-- °C</div>
+                </div>
+
+                <div class="detail">
+                    <div class="detail-label">Luftfeuchtigkeit</div>
+                    <div class="detail-value" id="humidity">-- %</div>
+                </div>
+
+                <div class="detail">
+                    <div class="detail-label">Wind</div>
+                    <div class="detail-value" id="wind">-- km/h</div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="card forecast">
+
+            <div class="section-title">
+                <h2>14-Tage-Wetter</h2>
+                <span>°C · km/h</span>
+            </div>
+
+            <div class="forecast-list" id="forecastList">
+                <div class="loading">Wetter wird geladen...</div>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- WECHSELKURSE -->
+
+    <section class="card currency-card">
+
+        <div class="section-title">
+            <h2>Euro-Wechselkurse</h2>
+            <span>1 EUR</span>
+        </div>
+
+        <div class="currency-list" id="currencyList">
+            <div class="loading">Kurse werden geladen...</div>
+        </div>
+
+        <div class="currency-trend">
+
+            <div class="trend-title">
+                <span>7-Tage-Trend</span>
+                <span>Veränderung</span>
+            </div>
+
+            <div class="trend-grid" id="trendGrid">
+                <div class="loading">Trend wird geladen...</div>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- NEWS -->
+
+    <section class="news-grid">
+
+        <div class="card news-card">
+
+            <div class="news-head">
+                <h2>Kieler Nachrichten</h2>
+                <div class="badge">KIEL</div>
+            </div>
+
+            <div id="kielerNews">
+                <div class="loading">Nachrichten werden geladen...</div>
+            </div>
+
+            <div class="source-note">
+                Quelle: Kieler Nachrichten
+            </div>
+
+        </div>
+
+
+        <div class="card news-card">
+
+            <div class="news-head">
+                <h2>Tagesschau</h2>
+                <div class="badge">DEUTSCHLAND</div>
+            </div>
+
+            <div id="tagesschauNews">
+                <div class="loading">Nachrichten werden geladen...</div>
+            </div>
+
+            <div class="source-note">
+                Quelle: tagesschau.de
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- KVG ECHTZEIT -->
+
+<section class="card kvg-live-card">
+
+    <div class="kvg-live-head">
+        <div>
+            <div class="kvg-live-title">KVG Echtzeit</div>
+            <div class="kvg-live-subtitle">
+                Stockholmstraße
+            </div>
+        </div>
+
+        <div class="kvg-live-badge">
+            FLOTT-LIVE
+        </div>
+    </div>
+
+    <div class="kvg-live-frame-wrap">
+        <iframe
+            class="kvg-live-frame"
+            src="https://kiel.flott-live.de/map/bus-stop/kvg-1893"
+            title="Flott-Live Stockholmstraße"
+            loading="lazy"
+            referrerpolicy="strict-origin-when-cross-origin">
+        </iframe>
+    </div>
+
+    <div class="kvg-live-footer">
+        <span>
+            Die Live-Anzeige kommt direkt von Flott-Live.
+        </span>
+
+        <a
+            href="https://kiel.flott-live.de/map/bus-stop/kvg-1893"
+            target="_blank"
+            rel="noopener noreferrer">
+            Flott-Live in neuem Fenster öffnen →
+        </a>
+    </div>
+
+</section>
+
+
+<div class="footer">
+        Wetterdaten: Open-Meteo · Wechselkurse: Frankfurter API · Nachrichten: RSS-Feeds der jeweiligen Anbieter
+    </div>
+
+</div>
+
+</body>
+<script>
+/* =========================================================
+   SETTINGS
+   ========================================================= */
+
+/*
+   Default location is Kiel.
+
+   If you want another fixed location later, change these:
+*/
+const DEFAULT_LAT = 54.3233;
+const DEFAULT_LON = 10.1228;
+const DEFAULT_CITY = "Kiel, Schleswig-Holstein";
+
+/*
+   Official RSS feeds:
+   - Kieler Nachrichten: general KN feed
+   - Tagesschau: official homepage feed
+*/
+const KIELER_RSS =
+    "https://www.kn-online.de/arc/outboundfeeds/rss/";
+
+const TAGESSCHAU_RSS =
+    "https://www.tagesschau.de/index~rss2.xml";
+
+/*
+   Public RSS conversion services.
+
+   The first is tried first; the second is a fallback.
+*/
+const RSS2JSON =
+    "https://api.rss2json.com/v1/api.json?rss_url=";
+
+const ALLORIGINS =
+    "https://api.allorigins.win/raw?url=";
+
+
+/* =========================================================
+   CLOCK
+   ========================================================= */
+
+function updateClock() {
+    const now = new Date();
+
+    document.getElementById("clock").textContent =
+        now.toLocaleTimeString("de-DE", {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit"
+        });
+
+    document.getElementById("date").textContent =
+        now.toLocaleDateString("de-DE", {
+            weekday: "long",
+            day: "2-digit",
+            month: "long",
+            year: "numeric"
+        });
+}
+
+updateClock();
+setInterval(updateClock, 1000);
+
+
+/* =========================================================
+   WEATHER
+   ========================================================= */
+
+async function loadWeather(lat = DEFAULT_LAT, lon = DEFAULT_LON, city = DEFAULT_CITY) {
+
+    const url =
+        "https://api.open-meteo.com/v1/forecast" +
+        `?latitude=${lat}` +
+        `&longitude=${lon}` +
+        "&current=temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m,weather_code" +
+        "&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset" +
+        "&temperature_unit=celsius" +
+        "&wind_speed_unit=kmh" +
+        "&timezone=auto&forecast_days=14";
+
+    try {
+        const response = await fetch(url, { cache: "no-store" });
+
+        if (!response.ok) {
+            throw new Error("Weather request failed");
+        }
+
+        const data = await response.json();
+
+        document.getElementById("location").textContent = city;
+
+        renderCurrentWeather(data);
+        renderForecast(data);
+
+    } catch (error) {
+        console.error(error);
+
+        document.getElementById("description").textContent =
+            "Wetterdaten konnten nicht geladen werden.";
+    }
+}
+
+function renderCurrentWeather(data) {
+    const current = data.current;
+
+    document.getElementById("temperature").textContent =
+        `${Math.round(current.temperature_2m)}°`;
+
+    document.getElementById("feelsLike").textContent =
+        `${Math.round(current.apparent_temperature)} °C`;
+
+    document.getElementById("humidity").textContent =
+        `${current.relative_humidity_2m} %`;
+
+    document.getElementById("wind").textContent =
+        `${Math.round(current.wind_speed_10m)} km/h`;
+
+    document.getElementById("description").textContent =
+        weatherText(current.weather_code);
+
+    document.getElementById("weatherIcon").textContent =
+        weatherIcon(current.weather_code);
+}
+
+
+function renderKompakt(data) {
+    const daily = data.daily;
+
+    if (daily?.sunrise?.[0]) {
+        const sunrise = new Date(daily.sunrise[0]);
+        document.getElementById("sunrise").textContent =
+            sunrise.toLocaleTimeString("de-DE", {
+                hour: "2-digit",
+                minute: "2-digit"
+            });
+    }
+
+    if (daily?.sunset?.[0]) {
+        const sunset = new Date(daily.sunset[0]);
+        document.getElementById("sunset").textContent =
+            sunset.toLocaleTimeString("de-DE", {
+                hour: "2-digit",
+                minute: "2-digit"
+            });
+    }
+
+    document.getElementById("rainToday").textContent =
+        `${daily?.precipitation_probability_max?.[0] ?? "--"} %`;
+
+    document.getElementById("maxToday").textContent =
+        `${Math.round(daily?.temperature_2m_max?.[0] ?? 0)} °C`;
+}
+
+function renderForecast(data) {
+    const daily = data.daily;
+    const container = document.getElementById("forecastList");
+
+    container.innerHTML = "";
+
+    for (let i = 0; i < Math.min(14, daily.time.length); i++) {
+
+        const date = new Date(daily.time[i] + "T12:00:00");
+
+        const dayName = i === 0
+            ? "Heute"
+            : date.toLocaleDateString("de-DE", { weekday: "short" });
+
+        const card = document.createElement("div");
+        card.className = "forecast-day" + (i === 0 ? " today" : "");
+
+        card.innerHTML = `
+            <div class="day-name">${escapeHtml(dayName)}</div>
+            <div class="day-icon">${weatherIcon(daily.weather_code[i])}</div>
+            <div class="day-temp">
+                ${Math.round(daily.temperature_2m_max[i])}° /
+                ${Math.round(daily.temperature_2m_min[i])}°
+            </div>
+            <div class="day-rain">
+                ${daily.precipitation_probability_max[i] ?? 0}% Regen
+            </div>
+        `;
+
+        container.appendChild(card);
+    }
+}
+
+function weatherText(code) {
+    const map = {
+        0: "Klarer Himmel",
+        1: "Überwiegend klar",
+        2: "Teilweise bewölkt",
+        3: "Bedeckt",
+        45: "Nebel",
+        48: "Nebel",
+        51: "Leichter Nieselregen",
+        53: "Nieselregen",
+        55: "Starker Nieselregen",
+        61: "Leichter Regen",
+        63: "Regen",
+        65: "Starker Regen",
+        71: "Leichter Schneefall",
+        73: "Schneefall",
+        75: "Starker Schneefall",
+        80: "Regenschauer",
+        81: "Regenschauer",
+        82: "Starke Regenschauer",
+        95: "Gewitter",
+        96: "Gewitter mit Hagel",
+        99: "Gewitter mit Hagel"
+    };
+
+    return map[code] || "Unbekannt";
+}
+
+function weatherIcon(code) {
+    if (code === 0) return "☀️";
+    if ([1, 2].includes(code)) return "🌤️";
+    if (code === 3) return "☁️";
+    if ([45, 48].includes(code)) return "🌫️";
+    if ([51,53,55,61,63,65,80,81,82].includes(code)) return "🌧️";
+    if ([71,73,75].includes(code)) return "❄️";
+    if ([95,96,99].includes(code)) return "⛈️";
+    return "🌤️";
+}
+
+
+/* =========================================================
+   NEWS
+   ========================================================= */
+
+async function getRSSItems(feedUrl) {
+
+    /* Try RSS2JSON first. */
+    try {
+        const response = await fetch(
+            RSS2JSON + encodeURIComponent(feedUrl),
+            { cache: "no-store" }
+        );
+
+        if (response.ok) {
+            const data = await response.json();
+
+            if (Array.isArray(data.items) && data.items.length) {
+                return data.items.map(item => ({
+                    title: item.title || "Ohne Titel",
+                    link: item.link || "#",
+                    date: item.pubDate || "",
+                    image: item.thumbnail || item.enclosure?.link || item.image || ""
+                }));
+            }
+        }
+    } catch (error) {
+        console.warn("RSS2JSON unavailable:", error);
+    }
+
+    /* Fallback: fetch raw XML through AllOrigins. */
+    try {
+        const response = await fetch(
+            ALLORIGINS + encodeURIComponent(feedUrl),
+            { cache: "no-store" }
+        );
+
+        if (!response.ok) {
+            throw new Error("RSS fallback failed");
+        }
+
+        const xmlText = await response.text();
+        const xml = new DOMParser().parseFromString(xmlText, "text/xml");
+
+        const items = [...xml.querySelectorAll("item")];
+
+        return items.map(item => ({
+            title: item.querySelector("title")?.textContent?.trim() || "Ohne Titel",
+            link: item.querySelector("link")?.textContent?.trim() || "#",
+            date:
+                item.querySelector("pubDate")?.textContent?.trim() ||
+                item.querySelector("dc\\:date")?.textContent?.trim() ||
+                ""
+        }));
+
+    } catch (error) {
+        console.error("RSS fallback failed:", error);
+        throw error;
+    }
+}
+
+window.__kielNews = [];
+window.__tagesschauNews = [];
+window.__kielNewsAll = [];
+window.__tagesschauNewsAll = [];
+
+async function loadNews(feedUrl, containerId) {
+
+    const container = document.getElementById(containerId);
+
+    try {
+        const items = await getRSSItems(feedUrl);
+
+        if (!items.length) {
+            throw new Error("No news items");
+        }
+
+        container.innerHTML = "";
+
+        const topNews = items.slice(0, 3);
+
+        if (containerId === "kielerNews") {
+            window.__kielNewsAll = items;
+        } else {
+            window.__tagesschauNewsAll = items;
+        }
+
+        updateNewsStrip();
+
+        if (containerId === "kielerNews") {
+            window.__kielNews = topNews;
+        } else {
+            window.__tagesschauNews = topNews;
+        }
+
+        updateTicker();
+
+        topNews.forEach(article => {
+
+            const item = document.createElement("article");
+            item.className = "news-item";
+
+            let dateText = "";
+
+            if (article.date) {
+                const parsed = new Date(article.date);
+
+                if (!Number.isNaN(parsed.getTime())) {
+                    dateText = parsed.toLocaleDateString("de-DE", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "numeric"
+                    });
+                }
+            }
+
+            const imageHtml = article.image
+                ? `<img class="news-image"
+                        src="${safeUrl(article.image)}"
+                        alt=""
+                        loading="lazy"
+                        onerror="this.remove()">`
+                : "";
+
+            item.innerHTML = `
+                ${imageHtml}
+                <a
+                    class="news-link"
+                    href="${safeUrl(article.link)}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >${escapeHtml(article.title)}</a>
+                ${dateText ? `<div class="news-date">${dateText}</div>` : ""}
+            `;
+
+            container.appendChild(item);
+        });
+
+    } catch (error) {
+
+        container.innerHTML = `
+            <div class="error">
+                Nachrichten konnten gerade nicht geladen werden.
+                <br><br>
+                <small>
+                    Die Internet-Verbindung oder der RSS-Dienst ist eventuell nicht verfügbar.
+                </small>
+            </div>
+        `;
+    }
+}
+
+async function loadTicker() {
+
+    const ticker = document.getElementById("tickerContent");
+
+    try {
+        const [kn, ts] = await Promise.all([
+            getRSSItems(KIELER_RSS),
+            getRSSItems(TAGESSCHAU_RSS)
+        ]);
+
+        const headlines = [
+            ...kn.slice(0, 5),
+            ...ts.slice(0, 5)
+        ].map(item => item.title);
+
+        if (headlines.length) {
+            ticker.textContent =
+                headlines.join("     •     ");
+        }
+
+    } catch (error) {
+        console.error("Ticker error:", error);
+    }
+}
+
+
+/* =========================================================
+   SECURITY
+   ========================================================= */
+
+function escapeHtml(value) {
+    const div = document.createElement("div");
+    div.textContent = String(value ?? "");
+    return div.innerHTML;
+}
+
+function safeUrl(value) {
+
+    try {
+        const url = new URL(value);
+
+        if (url.protocol === "https:" || url.protocol === "http:") {
+            return url.href;
+        }
+    } catch (error) {}
+
+    return "#";
+}
+
+
+/* =========================================================
+   CURRENCY
+   ========================================================= */
+
+const CURRENCIES = [
+    { code: "JPY", name: "Japanischer Yen", symbol: "¥" },
+    { code: "USD", name: "US-Dollar", symbol: "$" },
+    { code: "PLN", name: "Polnischer Złoty", symbol: "zł" },
+    { code: "MXN", name: "Mexikanischer Peso", symbol: "$" }
+];
+
+async function loadCurrencies() {
+
+    const container = document.getElementById("currencyList");
+    const trendGrid = document.getElementById("trendGrid");
+
+    try {
+        const latestResponse = await fetch(
+            "https://api.frankfurter.dev/v2/rates?base=EUR&quotes=JPY,USD,PLN,MXN",
+            { cache: "no-store" }
+        );
+
+        if (!latestResponse.ok) throw new Error("Latest rates failed");
+
+        const latestRows = await latestResponse.json();
+        const rates = {};
+
+        (Array.isArray(latestRows) ? latestRows : []).forEach(row => {
+            if (row.quote && typeof row.rate === "number") {
+                rates[row.quote] = row.rate;
+            }
+        });
+
+        container.innerHTML = "";
+
+        CURRENCIES.forEach(currency => {
+            const rate = rates[currency.code];
+            const formatted = rate
+                ? new Intl.NumberFormat("de-DE", {
+                    minimumFractionDigits: currency.code === "JPY" ? 2 : 4,
+                    maximumFractionDigits: currency.code === "JPY" ? 2 : 4
+                }).format(rate)
+                : "—";
+
+            const item = document.createElement("div");
+            item.className = "currency-item";
+            item.innerHTML = `
+                <div class="currency-name">EUR → ${currency.code}</div>
+                <div class="currency-rate">${formatted} ${currency.symbol}</div>
+                <div class="currency-time">1 EUR</div>
+            `;
+            container.appendChild(item);
+        });
+
+        // Get the available published rates from the last 7 days.
+        const today = new Date();
+        const from = new Date(today);
+        from.setDate(from.getDate() - 7);
+
+        const iso = d => d.toISOString().slice(0, 10);
+
+        const historyResponse = await fetch(
+            `https://api.frankfurter.dev/v2/rates?from=${iso(from)}&to=${iso(today)}&base=EUR&quotes=JPY,USD,PLN,MXN`,
+            { cache: "no-store" }
+        );
+
+        if (!historyResponse.ok) throw new Error("History failed");
+
+        const rows = await historyResponse.json();
+        const series = Object.fromEntries(
+            CURRENCIES.map(c => [c.code, []])
+        );
+
+        (Array.isArray(rows) ? rows : []).forEach(row => {
+            if (series[row.quote] && typeof row.rate === "number") {
+                series[row.quote].push(row.rate);
+            }
+        });
+
+        trendGrid.innerHTML = "";
+
+        CURRENCIES.forEach(currency => {
+            const points = series[currency.code] || [];
+
+            if (points.length < 2) {
+                const item = document.createElement("div");
+                item.className = "trend-item";
+                item.innerHTML = `
+                    <div class="trend-name">EUR → ${currency.code}</div>
+                    <div class="trend-value trend-flat">Noch keine Statistik</div>
+                `;
+                trendGrid.appendChild(item);
+                return;
+            }
+
+            const first = points[0];
+            const last = points[points.length - 1];
+            const change = ((last - first) / first) * 100;
+
+            const min = Math.min(...points);
+            const max = Math.max(...points);
+            const range = max - min || 1;
+            const w = 160, h = 38, pad = 3;
+
+            const pathData = points.map((value, i) => {
+                const x = pad + (i / (points.length - 1)) * (w - pad * 2);
+                const y = h - pad - ((value - min) / range) * (h - pad * 2);
+                return `${i ? "L" : "M"} ${x.toFixed(1)} ${y.toFixed(1)}`;
+            }).join(" ");
+
+            const cls = change > 0.05
+                ? "trend-up"
+                : change < -0.05
+                    ? "trend-down"
+                    : "trend-flat";
+
+            const arrow = change > 0.05
+                ? "↗"
+                : change < -0.05
+                    ? "↘"
+                    : "→";
+
+            const sign = change > 0 ? "+" : "";
+
+            const item = document.createElement("div");
+            item.className = "trend-item";
+            item.innerHTML = `
+                <div class="trend-name">EUR → ${currency.code}</div>
+                <svg class="trend-line ${cls}" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+                    <path d="${pathData}"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"/>
+                </svg>
+                <div class="trend-value ${cls}">
+                    ${arrow} ${sign}${change.toFixed(2)} %
+                </div>
+            `;
+            trendGrid.appendChild(item);
+        });
+
+    } catch (error) {
+        console.error("Currency error:", error);
+        container.innerHTML = `<div class="error">Wechselkurse konnten nicht geladen werden.</div>`;
+        trendGrid.innerHTML = `<div class="error">Statistik konnte nicht geladen werden.</div>`;
+    }
+}
+
+
+
+function updateNewsStrip() {
+    const target = document.getElementById("newsStripText");
+    if (!target) return;
+
+    const all = [
+        ...(window.__kielNewsAll || []),
+        ...(window.__tagesschauNewsAll || [])
+    ];
+
+    const unique = [];
+    const seen = new Set();
+
+    for (const article of all) {
+        const title = article?.title;
+        if (!title || seen.has(title)) continue;
+        seen.add(title);
+        unique.push(title);
+        if (unique.length >= 10) break;
+    }
+
+    target.textContent = unique.length
+        ? unique.join("   •   ")
+        : "Weitere Schlagzeilen werden geladen...";
+}
+
+function updateTicker() {
+    const ticker = document.getElementById("tickerContent");
+    if (!ticker) return;
+
+    const articles = [
+        ...(window.__kielNews || []),
+        ...(window.__tagesschauNews || [])
+    ].slice(0, 3);
+
+    if (!articles.length) {
+        ticker.textContent = "Aktuelle Nachrichten werden geladen...";
+        return;
+    }
+
+    ticker.textContent = articles
+        .map(article => article.title)
+        .filter(Boolean)
+        .join("   •   ");
+}
+
+
+/* =========================================================
+   REFRESH
+   ========================================================= */
+
+async function refreshAll() {
+
+    const button = document.getElementById("refreshBtn");
+
+    button.disabled = true;
+    button.textContent = "Lädt...";
+
+    try {
+        await Promise.all([
+            loadWeather(),
+            loadCurrencies(),
+            loadNews(KIELER_RSS, "kielerNews"),
+            loadNews(TAGESSCHAU_RSS, "tagesschauNews")
+        ]);
+    } finally {
+        button.disabled = false;
+        button.textContent = "Aktualisieren";
+    }
+}
+
+document.getElementById("refreshBtn")
+    .addEventListener("click", refreshAll);
+
+
+/* =========================================================
+   INITIAL LOAD
+   ========================================================= */
+
+refreshAll();
+
+/*
+   Automatically refresh every 10 minutes.
+*/
+setInterval(refreshAll, 10 * 60 * 1000);
+
+</script>
+
+</body>
+</html>
