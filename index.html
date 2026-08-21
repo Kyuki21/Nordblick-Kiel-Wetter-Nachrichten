@@ -962,6 +962,30 @@ button {
     gap: 14px;
 }
 
+.kvg-jump-btn {
+    border: 1px solid var(--line);
+    background: var(--card2);
+    color: var(--text);
+    font-weight: 800;
+    font-size: .78rem;
+    padding: 8px 12px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: transform .15s ease, background .15s ease, border-color .15s ease;
+    white-space: nowrap;
+}
+
+.kvg-jump-btn:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+    transform: translateY(-1px);
+}
+
+.kvg-jump-btn:active {
+    transform: translateY(0);
+}
+
 .language-switch {
     display: inline-flex;
     padding: 3px;
@@ -1063,6 +1087,11 @@ body { overflow-x: hidden; }
 
     .date {
         font-size: .76rem;
+    }
+
+    .kvg-jump-btn {
+        padding: 8px 10px;
+        font-size: .7rem;
     }
 
     .language-switch,
@@ -1302,6 +1331,10 @@ body { overflow-x: hidden; }
         </div>
 
         <div class="header-actions">
+            <button type="button" class="kvg-jump-btn" id="kvgJumpBtn" aria-label="KVG Live öffnen">
+                ↓ <span data-i18n="jumpKvg">KVG Live</span>
+            </button>
+
             <div class="clock-wrap">
                 <div class="clock" id="clock">--:--</div>
                 <div class="date" id="date">--</div>
@@ -1439,7 +1472,7 @@ body { overflow-x: hidden; }
 
     <!-- KVG ECHTZEIT -->
 
-<section class="card kvg-live-card">
+<section class="card kvg-live-card" id="kvg-live">
 
     <div class="kvg-live-head">
         <div>
@@ -1561,7 +1594,8 @@ const translations = {
         ratesError: "Wechselkurse konnten nicht geladen werden.",
         refreshLoading: "Lädt...",
         metricTitle: "Auf Fahrenheit und mph wechseln",
-        imperialTitle: "Auf Celsius und km/h wechseln"
+        imperialTitle: "Auf Celsius und km/h wechseln",
+        jumpKvg: "KVG Live"
     },
     en: {
         subtitle: "Kiel · Weather · News",
@@ -1591,7 +1625,8 @@ const translations = {
         ratesError: "Exchange rates could not be loaded.",
         refreshLoading: "Loading...",
         metricTitle: "Switch to Fahrenheit and mph",
-        imperialTitle: "Switch to Celsius and km/h"
+        imperialTitle: "Switch to Celsius and km/h",
+        jumpKvg: "KVG Live"
     }
 };
 
@@ -1610,7 +1645,18 @@ function applyLanguage() {
         if (translations[language][key]) el.textContent = translations[language][key];
     });
 
-    const deBtn = document.getElementById("deBtn");
+    const kvgJumpBtn = document.getElementById("kvgJumpBtn");
+
+if (kvgJumpBtn) {
+    kvgJumpBtn.addEventListener("click", () => {
+        const target = document.getElementById("kvg-live");
+        if (target) {
+            target.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+    });
+}
+
+const deBtn = document.getElementById("deBtn");
     const enBtn = document.getElementById("enBtn");
     deBtn?.classList.toggle("active", language === "de");
     enBtn?.classList.toggle("active", language === "en");
