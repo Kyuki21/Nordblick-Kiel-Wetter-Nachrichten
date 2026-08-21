@@ -951,6 +951,42 @@ button {
     white-space: nowrap;
 }
 
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.language-switch {
+    display: inline-flex;
+    padding: 3px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--card2);
+}
+
+.language-switch button {
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    font-weight: 800;
+    font-size: .75rem;
+    padding: 7px 10px;
+    border-radius: 999px;
+    cursor: pointer;
+}
+
+.language-switch button.active {
+    background: var(--accent);
+    color: white;
+}
+
+@media (max-width: 700px) {
+    .header-actions { align-items: flex-end; }
+    .clock { font-size: 1.4rem; }
+}
+
 </style>
 </head>
 
@@ -961,12 +997,18 @@ button {
     <header class="header">
         <div>
             <div class="brand">NORDBLICK</div>
-            <div class="subtitle">Kiel · Wetter · Nachrichten</div>
+            <div class="subtitle" data-i18n="subtitle">Kiel · Weather · News</div>
         </div>
 
-        <div class="clock-wrap">
-            <div class="clock" id="clock">--:--</div>
-            <div class="date" id="date">--</div>
+        <div class="header-actions">
+            <div class="clock-wrap">
+                <div class="clock" id="clock">--:--</div>
+                <div class="date" id="date">--</div>
+            </div>
+            <div class="language-switch" aria-label="Language">
+                <button type="button" id="deBtn" class="active" aria-pressed="true">DE</button>
+                <button type="button" id="enBtn" aria-pressed="false">EN</button>
+            </div>
         </div>
     </header>
 
@@ -981,18 +1023,14 @@ button {
                     Kiel, Schleswig-Holstein
                 </div>
 
-                <button class="refresh-btn" id="refreshBtn" type="button">
-                    Aktualisieren
-                </button>
+                <button class="refresh-btn" id="refreshBtn" type="button" data-i18n="refresh">Refresh</button>
             </div>
 
             <div class="current-main">
 
                 <div>
                     <div class="temperature" id="temperature">--°</div>
-                    <div class="description" id="description">
-                        Wetter wird geladen...
-                    </div>
+                    <div class="description" id="description" data-i18n="loadingWeather">Weather loading...</div>
                 </div>
 
                 <div class="weather-icon" id="weatherIcon">
@@ -1004,17 +1042,17 @@ button {
             <div class="details">
 
                 <div class="detail">
-                    <div class="detail-label">Gefühlt</div>
+                    <div class="detail-label" data-i18n="feels">Feels like</div>
                     <div class="detail-value" id="feelsLike">-- °C</div>
                 </div>
 
                 <div class="detail">
-                    <div class="detail-label">Luftfeuchtigkeit</div>
+                    <div class="detail-label" data-i18n="humidity">Humidity</div>
                     <div class="detail-value" id="humidity">-- %</div>
                 </div>
 
                 <div class="detail">
-                    <div class="detail-label">Wind</div>
+                    <div class="detail-label" data-i18n="wind">Wind</div>
                     <div class="detail-value" id="wind">-- km/h</div>
                 </div>
 
@@ -1026,7 +1064,7 @@ button {
         <div class="card forecast">
 
             <div class="section-title">
-                <h2>7-Tage-Wetter</h2>
+                <h2 data-i18n="sevenDay">7-Day Weather</h2>
                 <div class="unit-switch" aria-label="Temperatureinheit und Windgeschwindigkeit">
                     <button type="button" id="metricBtn" class="active" aria-pressed="true">°C · km/h</button>
                     <button type="button" id="imperialBtn" aria-pressed="false">°F · mph</button>
@@ -1034,7 +1072,7 @@ button {
             </div>
 
             <div class="forecast-list" id="forecastList">
-                <div class="loading">Wetter wird geladen...</div>
+                <div class="loading" data-i18n="loadingWeather">Weather loading...</div>
             </div>
 
         </div>
@@ -1048,12 +1086,12 @@ button {
     <section class="card currency-card">
 
         <div class="section-title">
-            <h2>Euro-Wechselkurse</h2>
+            <h2 data-i18n="currencyTitle">Euro Exchange Rates</h2>
             <span>1 EUR</span>
         </div>
 
         <div class="currency-list" id="currencyList">
-            <div class="loading">Kurse werden geladen...</div>
+            <div class="loading" data-i18n="loadingRates">Rates loading...</div>
         </div>
 
 
@@ -1067,17 +1105,15 @@ button {
         <div class="card news-card">
 
             <div class="news-head">
-                <h2>Kieler Nachrichten</h2>
+                <h2 data-i18n="kielNews">Kiel News</h2>
                 <div class="badge">KIEL</div>
             </div>
 
             <div id="kielerNews">
-                <div class="loading">Nachrichten werden geladen...</div>
+                <div class="loading" data-i18n="loadingNews">News loading...</div>
             </div>
 
-            <div class="source-note">
-                Quelle: Kieler Nachrichten
-            </div>
+            <div class="source-note"><span data-i18n="source">Source</span>: Kiel News</div>
 
         </div>
 
@@ -1085,17 +1121,15 @@ button {
         <div class="card news-card">
 
             <div class="news-head">
-                <h2>Tagesschau</h2>
+                <h2 data-i18n="tagesschau">Tagesschau</h2>
                 <div class="badge">DEUTSCHLAND</div>
             </div>
 
             <div id="tagesschauNews">
-                <div class="loading">Nachrichten werden geladen...</div>
+                <div class="loading" data-i18n="loadingNews">News loading...</div>
             </div>
 
-            <div class="source-note">
-                Quelle: tagesschau.de
-            </div>
+            <div class="source-note"><span data-i18n="source">Source</span>: tagesschau.de</div>
 
         </div>
 
@@ -1108,15 +1142,13 @@ button {
 
     <div class="kvg-live-head">
         <div>
-            <div class="kvg-live-title">KVG Echtzeit</div>
+            <div class="kvg-live-title" data-i18n="kvgLive">KVG Live</div>
             <div class="kvg-live-subtitle">
                 Stockholmstraße
             </div>
         </div>
 
-        <div class="kvg-live-badge">
-            FLOTT-LIVE
-        </div>
+        <div class="kvg-live-badge">FLOTT-LIVE</div>
     </div>
 
     <div class="kvg-live-frame-wrap">
@@ -1131,14 +1163,14 @@ button {
 
     <div class="kvg-live-footer">
         <span>
-            Die Live-Anzeige kommt direkt von Flott-Live.
+            <span data-i18n="liveFrom">The live display comes directly from Flott-Live.</span>
         </span>
 
         <a
             href="https://kiel.flott-live.de/map/bus-stop/kvg-1893"
             target="_blank"
             rel="noopener noreferrer">
-            Flott-Live in neuem Fenster öffnen →
+            <span data-i18n="openLive">Open Flott-Live in new window →</span>
         </a>
     </div>
 
@@ -1146,11 +1178,11 @@ button {
 
 
 <div class="footer">
-        Wetterdaten: Open-Meteo · Wechselkurse: Frankfurter API · Nachrichten: Kieler Nachrichten RSS · Tagesschau API
+        <span data-i18n="footerSources">Weather: Open-Meteo · Exchange rates: Frankfurter API · News: Kiel News RSS · Tagesschau API</span>
     </div>
 
     <div class="site-info">
-        NORDBLICK ist dein kompakter Info-Bildschirm für Kiel und den Norden. Die Seite kombiniert aktuelle Wetterdaten, eine 7-Tage-Wettervorhersage, wichtige Nachrichten von Kieler Nachrichten und Tagesschau sowie aktuelle Euro-Wechselkurse – alles übersichtlich auf einer Seite.
+        <span data-i18n="siteInfo">NORDBLICK is your compact information screen for Kiel and northern Germany. The page combines current weather, a 7-day forecast, news from Kiel News and Tagesschau, and current euro exchange rates – all clearly arranged on one page.</span>
     </div>
 
 </div>
@@ -1194,6 +1226,111 @@ const ALLORIGINS =
 
 
 /* =========================================================
+   LANGUAGE
+   ========================================================= */
+
+let language = localStorage.getItem("nordblickLanguage") || "de";
+
+const translations = {
+    de: {
+        subtitle: "Kiel · Wetter · Nachrichten",
+        refresh: "Aktualisieren",
+        loadingWeather: "Wetter wird geladen...",
+        feels: "Gefühlt",
+        humidity: "Luftfeuchtigkeit",
+        wind: "Wind",
+        sevenDay: "7-Tage-Wetter",
+        currencyTitle: "Euro-Wechselkurse",
+        loadingRates: "Kurse werden geladen...",
+        kielNews: "Kieler Nachrichten",
+        tagesschau: "Tagesschau",
+        loadingNews: "Nachrichten werden geladen...",
+        source: "Quelle",
+        kvgLive: "KVG Echtzeit",
+        liveFrom: "Die Live-Anzeige kommt direkt von Flott-Live.",
+        openLive: "Flott-Live in neuem Fenster öffnen →",
+        footerSources: "Wetterdaten: Open-Meteo · Wechselkurse: Frankfurter API · Nachrichten: Kieler Nachrichten RSS · Tagesschau API",
+        siteInfo: "NORDBLICK ist dein kompakter Info-Bildschirm für Kiel und den Norden. Die Seite kombiniert aktuelle Wetterdaten, eine 7-Tage-Wettervorhersage, wichtige Nachrichten von Kieler Nachrichten und Tagesschau sowie aktuelle Euro-Wechselkurse – alles übersichtlich auf einer Seite.",
+        rain: "Regen",
+        windPrefix: "Wind",
+        today: "Heute",
+        loadingError: "Wetterdaten konnten nicht geladen werden.",
+        newsError: "Nachrichten konnten gerade nicht geladen werden.",
+        newsErrorSmall: "Die Internet-Verbindung oder der RSS-Dienst ist eventuell nicht verfügbar.",
+        ratesError: "Wechselkurse konnten nicht geladen werden.",
+        refreshLoading: "Lädt...",
+        metricTitle: "Auf Fahrenheit und mph wechseln",
+        imperialTitle: "Auf Celsius und km/h wechseln"
+    },
+    en: {
+        subtitle: "Kiel · Weather · News",
+        refresh: "Refresh",
+        loadingWeather: "Weather loading...",
+        feels: "Feels like",
+        humidity: "Humidity",
+        wind: "Wind",
+        sevenDay: "7-Day Weather",
+        currencyTitle: "Euro Exchange Rates",
+        loadingRates: "Rates loading...",
+        kielNews: "Kiel News",
+        tagesschau: "Tagesschau",
+        loadingNews: "News loading...",
+        source: "Source",
+        kvgLive: "KVG Live",
+        liveFrom: "The live display comes directly from Flott-Live.",
+        openLive: "Open Flott-Live in new window →",
+        footerSources: "Weather: Open-Meteo · Exchange rates: Frankfurter API · News: Kiel News RSS · Tagesschau API",
+        siteInfo: "NORDBLICK is your compact information screen for Kiel and northern Germany. The page combines current weather, a 7-day forecast, news from Kiel News and Tagesschau, and current euro exchange rates – all clearly arranged on one page.",
+        rain: "Rain",
+        windPrefix: "Wind",
+        today: "Today",
+        loadingError: "Weather data could not be loaded.",
+        newsError: "News could not be loaded right now.",
+        newsErrorSmall: "The internet connection or RSS service may be unavailable.",
+        ratesError: "Exchange rates could not be loaded.",
+        refreshLoading: "Loading...",
+        metricTitle: "Switch to Fahrenheit and mph",
+        imperialTitle: "Switch to Celsius and km/h"
+    }
+};
+
+function t(key) {
+    return translations[language]?.[key] ?? translations.de[key] ?? key;
+}
+
+function applyLanguage() {
+    document.documentElement.lang = language;
+    document.title = language === "en"
+        ? "Kiel Dashboard – Weather & News"
+        : "Kiel Dashboard – Wetter & Nachrichten";
+
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.dataset.i18n;
+        if (translations[language][key]) el.textContent = translations[language][key];
+    });
+
+    const deBtn = document.getElementById("deBtn");
+    const enBtn = document.getElementById("enBtn");
+    deBtn?.classList.toggle("active", language === "de");
+    enBtn?.classList.toggle("active", language === "en");
+    deBtn?.setAttribute("aria-pressed", String(language === "de"));
+    enBtn?.setAttribute("aria-pressed", String(language === "en"));
+
+    updateClock();
+    updateUnitSwitch();
+    if (window.__weatherData) {
+        renderCurrentWeather(window.__weatherData);
+        renderForecast(window.__weatherData);
+    }
+}
+
+function setLanguage(lang) {
+    language = lang === "en" ? "en" : "de";
+    localStorage.setItem("nordblickLanguage", language);
+    applyLanguage();
+}
+
+/* =========================================================
    CLOCK
    ========================================================= */
 
@@ -1201,14 +1338,14 @@ function updateClock() {
     const now = new Date();
 
     document.getElementById("clock").textContent =
-        now.toLocaleTimeString("de-DE", {
+        now.toLocaleTimeString(language === "en" ? "en-US" : "de-DE", {
             hour: "2-digit",
             minute: "2-digit",
             second: "2-digit"
         });
 
     document.getElementById("date").textContent =
-        now.toLocaleDateString("de-DE", {
+        now.toLocaleDateString(language === "en" ? "en-US" : "de-DE", {
             weekday: "long",
             day: "2-digit",
             month: "long",
@@ -1251,7 +1388,7 @@ function updateUnitSwitch() {
     imperialBtn.setAttribute("aria-pressed", String(useImperial));
 
     const unitLabel = document.querySelector(".section-title .unit-switch");
-    if (unitLabel) unitLabel.title = useImperial ? "Auf Celsius und km/h wechseln" : "Auf Fahrenheit und mph wechseln";
+    if (unitLabel) unitLabel.title = useImperial ? t("imperialTitle") : t("metricTitle");
 }
 
 function setUnits(imperial) {
@@ -1300,7 +1437,7 @@ async function loadWeather(lat = DEFAULT_LAT, lon = DEFAULT_LON, city = DEFAULT_
         console.error(error);
 
         document.getElementById("description").textContent =
-            "Wetterdaten konnten nicht geladen werden.";
+            t("loadingError");
     }
 }
 
@@ -1410,8 +1547,8 @@ function renderForecast(data) {
         const date = new Date(daily.time[i] + "T12:00:00");
 
         const dayName = i === 0
-            ? "Heute"
-            : date.toLocaleDateString("de-DE", { weekday: "short" });
+            ? t("today")
+            : date.toLocaleDateString(language === "en" ? "en-US" : "de-DE", { weekday: "short" });
 
         const card = document.createElement("div");
         card.className = "forecast-day" + (i === 0 ? " today" : "");
@@ -1424,8 +1561,8 @@ function renderForecast(data) {
             <div class="day-name">${escapeHtml(dayName)}</div>
             <div class="day-icon">${weatherIcon(daily.weather_code[i])}</div>
             <div class="day-temp">${maxTemp} / ${minTemp}</div>
-            <div class="day-rain">${daily.precipitation_probability_max[i] ?? 0}% Regen</div>
-            <div class="day-wind">Wind ${wind}</div>
+            <div class="day-rain">${daily.precipitation_probability_max[i] ?? 0}% ${t("rain")}</div>
+            <div class="day-wind">${t("windPrefix")} ${wind}</div>
         `;
 
         container.appendChild(card);
@@ -1434,30 +1571,22 @@ function renderForecast(data) {
 
 function weatherText(code) {
     const map = {
-        0: "Klarer Himmel",
-        1: "Überwiegend klar",
-        2: "Teilweise bewölkt",
-        3: "Bedeckt",
-        45: "Nebel",
-        48: "Nebel",
-        51: "Leichter Nieselregen",
-        53: "Nieselregen",
-        55: "Starker Nieselregen",
-        61: "Leichter Regen",
-        63: "Regen",
-        65: "Starker Regen",
-        71: "Leichter Schneefall",
-        73: "Schneefall",
-        75: "Starker Schneefall",
-        80: "Regenschauer",
-        81: "Regenschauer",
-        82: "Starke Regenschauer",
-        95: "Gewitter",
-        96: "Gewitter mit Hagel",
-        99: "Gewitter mit Hagel"
+        de: {
+            0: "Klarer Himmel", 1: "Überwiegend klar", 2: "Teilweise bewölkt", 3: "Bedeckt",
+            45: "Nebel", 48: "Nebel", 51: "Leichter Nieselregen", 53: "Nieselregen", 55: "Starker Nieselregen",
+            61: "Leichter Regen", 63: "Regen", 65: "Starker Regen", 71: "Leichter Schneefall", 73: "Schneefall",
+            75: "Starker Schneefall", 80: "Regenschauer", 81: "Regenschauer", 82: "Starke Regenschauer",
+            95: "Gewitter", 96: "Gewitter mit Hagel", 99: "Gewitter mit Hagel"
+        },
+        en: {
+            0: "Clear sky", 1: "Mainly clear", 2: "Partly cloudy", 3: "Overcast",
+            45: "Fog", 48: "Fog", 51: "Light drizzle", 53: "Drizzle", 55: "Heavy drizzle",
+            61: "Light rain", 63: "Rain", 65: "Heavy rain", 71: "Light snow", 73: "Snow",
+            75: "Heavy snow", 80: "Rain showers", 81: "Rain showers", 82: "Heavy rain showers",
+            95: "Thunderstorm", 96: "Thunderstorm with hail", 99: "Thunderstorm with hail"
+        }
     };
-
-    return map[code] || "Unbekannt";
+    return map[language][code] || (language === "en" ? "Unknown" : "Unbekannt");
 }
 
 function weatherIcon(code) {
@@ -1663,11 +1792,9 @@ async function loadNews(feedUrl, containerId) {
 
         container.innerHTML = `
             <div class="error">
-                Nachrichten konnten gerade nicht geladen werden.
+                ${t("newsError")}
                 <br><br>
-                <small>
-                    Die Internet-Verbindung oder der RSS-Dienst ist eventuell nicht verfügbar.
-                </small>
+                <small>${t("newsErrorSmall")}</small>
             </div>
         `;
     }
@@ -1777,7 +1904,7 @@ async function loadCurrencies() {
 
     } catch (error) {
         console.error("Currency error:", error);
-        container.innerHTML = `<div class="error">Wechselkurse konnten nicht geladen werden.</div>`;
+        container.innerHTML = `<div class="error">${t("ratesError")}</div>`;
     }
 }
 
@@ -1829,6 +1956,10 @@ function updateTicker() {
 }
 
 
+document.getElementById("deBtn")?.addEventListener("click", () => setLanguage("de"));
+document.getElementById("enBtn")?.addEventListener("click", () => setLanguage("en"));
+applyLanguage();
+
 document.getElementById("metricBtn")?.addEventListener("click", () => setUnits(false));
 document.getElementById("imperialBtn")?.addEventListener("click", () => setUnits(true));
 updateUnitSwitch();
@@ -1842,7 +1973,7 @@ async function refreshAll() {
     const button = document.getElementById("refreshBtn");
 
     button.disabled = true;
-    button.textContent = "Lädt...";
+    button.textContent = t("refreshLoading");
 
     try {
         await Promise.all([
@@ -1853,7 +1984,7 @@ async function refreshAll() {
         ]);
     } finally {
         button.disabled = false;
-        button.textContent = "Aktualisieren";
+        button.textContent = t("refresh");
     }
 }
 
