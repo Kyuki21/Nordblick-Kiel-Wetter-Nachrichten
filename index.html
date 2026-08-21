@@ -95,7 +95,7 @@ button {
 
 .weather-grid {
     display: grid;
-    grid-template-columns: 1.15fr .85fr;
+    grid-template-columns: 1fr;
     gap: 18px;
     margin-bottom: 18px;
     align-items: stretch;
@@ -111,8 +111,8 @@ button {
 
 .current {
     padding: 28px;
-    min-height: 360px;
-    height: 100%;
+    min-height: 330px;
+    height: auto;
 }
 
 .location-row {
@@ -181,7 +181,7 @@ button {
 
 .detail-label {
     color: var(--muted);
-    font-size: .78rem;
+    font-size: .82rem;
 }
 
 .detail-value {
@@ -193,8 +193,8 @@ button {
     padding: 24px;
     overflow: hidden;
     min-width: 0;
-    min-height: 360px;
-    height: 100%;
+    min-height: 300px;
+    height: auto;
     display: flex;
     flex-direction: column;
 }
@@ -221,9 +221,9 @@ button {
 
 .forecast-list {
     display: grid;
-    grid-template-columns: repeat(7, minmax(54px, 1fr));
-    grid-template-rows: repeat(2, minmax(120px, 1fr));
-    gap: 9px;
+    grid-template-columns: repeat(7, minmax(120px, 1fr));
+    grid-template-rows: 1fr;
+    gap: 12px;
     flex: 1;
     align-content: stretch;
 }
@@ -231,7 +231,8 @@ button {
 .forecast-day {
     min-width: 0;
     min-height: 0;
-    padding: 11px 7px;
+    padding: 14px 10px;
+    border-radius: 14px;
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -244,74 +245,90 @@ button {
 
 .day-name {
     font-weight: 800;
-    font-size: .78rem;
+    font-size: .84rem;
 }
 
 .day-icon {
-    font-size: 1.9rem;
-    margin: 9px 0;
+    font-size: 2.15rem;
+    margin: 12px 0;
 }
 
 .day-temp {
     font-weight: 800;
-    font-size: .9rem;
+    font-size: 1.02rem;
 }
 
 .day-rain {
     color: var(--muted);
-    font-size: .7rem;
-    margin-top: 5px;
+    font-size: .76rem;
+    margin-top: 6px;
+    line-height: 1.2;
+}
+
+.day-wind {
+    color: var(--muted);
+    font-size: .76rem;
+    margin-top: 3px;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+.weather-warning-card {
+    display: none !important;
+    padding: 18px 22px;
+    margin-bottom: 18px;
+}
+
+.weather-warning-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.weather-warning-title {
+    font-size: 1.05rem;
+    font-weight: 850;
+}
+
+.weather-warning-badge {
+    font-size: .68rem;
+    font-weight: 850;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .06em;
+}
+
+.weather-warning {
+    margin-top: 10px;
+    padding: 12px 14px;
+    border-radius: 13px;
+    background: var(--card2);
+    border: 1px solid var(--line);
+    color: var(--text);
+    line-height: 1.45;
+    font-size: .84rem;
+}
+
+.weather-warning strong {
+    font-weight: 850;
+}
+
+.weather-warning.ok {
+    border-color: rgba(49,196,141,.25);
+}
+
+.weather-warning.warn {
+    border-color: rgba(245,158,11,.38);
+}
+
+.weather-warning.danger {
+    border-color: rgba(239,107,115,.45);
 }
 
 .currency-card {
     padding: 22px 24px;
     margin-bottom: 18px;
-}
-
- .currency-trend {
-    margin-top: 14px;
-    padding-top: 14px;
-    border-top: 1px solid var(--line);
-}
-.trend-title {
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 10px;
-    color: var(--muted);
-    font-size: .75rem;
-    font-weight: 750;
-}
-.trend-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-}
-.trend-item {
-    background: var(--card2);
-    border: 1px solid var(--line);
-    border-radius: 13px;
-    padding: 9px 10px;
-}
-.trend-name { color: var(--muted); font-size: .68rem; font-weight: 750; }
-.trend-line {
-    width: 100%;
-    height: 48px;
-    margin: 4px 0;
-    padding: 3px 0;
-    border-radius: 7px;
-    background-image:
-        linear-gradient(to right, rgba(255,255,255,.07) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255,255,255,.07) 1px, transparent 1px);
-    background-size: 25% 50%;
-    background-position: center;
-}
-.trend-value { font-size: .72rem; font-weight: 850; }
-.trend-up { color: #31c48d; }
-.trend-down { color: #ef6b73; }
-.trend-flat { color: var(--muted); }
-@media (max-width: 700px) {
-    .trend-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 .currency-list {
@@ -392,10 +409,14 @@ button {
     border-bottom: 0;
 }
 
+.news-item.image-failed .news-image {
+    display: none;
+}
+
 .news-image {
     display: block;
     width: 100%;
-    height: 125px;
+    height: 150px;
     object-fit: cover;
     border-radius: 14px;
     margin-bottom: 10px;
@@ -768,6 +789,168 @@ button {
     }
 }
 
+
+.site-info {
+    max-width: 1100px;
+    margin: 14px auto 4px;
+    padding: 0 10px;
+    text-align: center;
+    color: var(--muted);
+    font-size: .58rem;
+    line-height: 1.45;
+    opacity: .72;
+}
+
+
+.legal-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-size: .58rem;
+    opacity: .82;
+}
+
+.legal-footer a {
+    color: var(--muted);
+    text-decoration: none;
+}
+
+.legal-footer a:hover {
+    color: var(--accent);
+}
+
+.legal-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+}
+
+.legal-modal.open {
+    display: block;
+}
+
+.legal-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,.55);
+    backdrop-filter: blur(5px);
+}
+
+.legal-modal-box {
+    position: relative;
+    width: min(720px, 92vw);
+    max-height: 82vh;
+    overflow: auto;
+    margin: 8vh auto 0;
+    background: var(--card);
+    color: var(--text);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 28px;
+    box-shadow: 0 30px 90px rgba(0,0,0,.25);
+}
+
+.legal-modal-box h2 {
+    margin-top: 0;
+}
+
+.legal-modal-box p {
+    line-height: 1.55;
+    color: var(--text);
+}
+
+.legal-note {
+    color: var(--muted) !important;
+    font-size: .82rem;
+}
+
+.legal-close {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    font-size: 1.8rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+@media (max-width: 700px) {
+    .legal-modal-box {
+        margin-top: 4vh;
+        padding: 22px;
+    }
+}
+
+
+.unit-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--card2);
+}
+
+.unit-switch button {
+    border: 0;
+    border-radius: 999px;
+    padding: 7px 11px;
+    background: transparent;
+    color: var(--muted);
+    font-size: .72rem;
+    font-weight: 850;
+    cursor: pointer;
+    transition: background .18s ease, color .18s ease, transform .18s ease;
+}
+
+.unit-switch button:hover {
+    color: var(--text);
+}
+
+.unit-switch button.active {
+    background: var(--accent);
+    color: white;
+}
+
+@media (max-width: 1050px) {
+    .forecast-list {
+        grid-template-columns: repeat(7, minmax(90px, 1fr));
+        grid-template-rows: 1fr;
+        overflow-x: auto;
+        padding-bottom: 4px;
+    }
+
+    .forecast-day {
+        min-width: 90px;
+        min-height: 210px;
+    }
+}
+
+@media (max-width: 700px) {
+    .section-title {
+        align-items: flex-start;
+    }
+
+    .unit-switch {
+        flex-shrink: 0;
+    }
+}
+
+.forecast-wind {
+    font-size: .72rem;
+    color: var(--muted);
+    margin-top: 3px;
+    white-space: nowrap;
+}
+
 </style>
 </head>
 
@@ -843,8 +1026,11 @@ button {
         <div class="card forecast">
 
             <div class="section-title">
-                <h2>14-Tage-Wetter</h2>
-                <span>°C</span>
+                <h2>7-Tage-Wetter</h2>
+                <div class="unit-switch" aria-label="Temperatureinheit und Windgeschwindigkeit">
+                    <button type="button" id="metricBtn" class="active" aria-pressed="true">°C · km/h</button>
+                    <button type="button" id="imperialBtn" aria-pressed="false">°F · mph</button>
+                </div>
             </div>
 
             <div class="forecast-list" id="forecastList">
@@ -854,6 +1040,7 @@ button {
         </div>
 
     </section>
+
 
 
     <!-- WECHSELKURSE -->
@@ -869,18 +1056,6 @@ button {
             <div class="loading">Kurse werden geladen...</div>
         </div>
 
-        <div class="currency-trend">
-
-            <div class="trend-title">
-                <span>7-Tage-Trend</span>
-                <span>Veränderung</span>
-            </div>
-
-            <div class="trend-grid" id="trendGrid">
-                <div class="loading">Trend wird geladen...</div>
-            </div>
-
-        </div>
 
     </section>
 
@@ -971,7 +1146,11 @@ button {
 
 
 <div class="footer">
-        Wetterdaten: Open-Meteo · Wechselkurse: Frankfurter API · Nachrichten: RSS-Feeds der jeweiligen Anbieter
+        Wetterdaten: Open-Meteo · Wechselkurse: Frankfurter API · Nachrichten: Kieler Nachrichten RSS · Tagesschau API
+    </div>
+
+    <div class="site-info">
+        NORDBLICK ist dein kompakter Info-Bildschirm für Kiel und den Norden. Die Seite kombiniert aktuelle Wetterdaten, eine 7-Tage-Wettervorhersage, wichtige Nachrichten von Kieler Nachrichten und Tagesschau sowie aktuelle Euro-Wechselkurse – alles übersichtlich auf einer Seite.
     </div>
 
 </div>
@@ -999,8 +1178,8 @@ const DEFAULT_CITY = "Kiel, Schleswig-Holstein";
 const KIELER_RSS =
     "https://www.kn-online.de/arc/outboundfeeds/rss/";
 
-const TAGESSCHAU_RSS =
-    "https://www.tagesschau.de/index~rss2.xml";
+const TAGESSCHAU_API =
+    "https://www.tagesschau.de/api2u/homepage/";
 
 /*
    Public RSS conversion services.
@@ -1042,6 +1221,50 @@ setInterval(updateClock, 1000);
 
 
 /* =========================================================
+   UNITS
+   ========================================================= */
+
+let useImperial = localStorage.getItem("nordblickUnits") === "imperial";
+
+function formatTemperature(celsius) {
+    const value = Number(celsius);
+    if (!Number.isFinite(value)) return "--°";
+    if (useImperial) return `${Math.round((value * 9 / 5) + 32)}°F`;
+    return `${Math.round(value)}°C`;
+}
+
+function formatWind(kmh) {
+    const value = Number(kmh);
+    if (!Number.isFinite(value)) return "--";
+    if (useImperial) return `${Math.round(value * 0.621371)} mph`;
+    return `${Math.round(value)} km/h`;
+}
+
+function updateUnitSwitch() {
+    const metricBtn = document.getElementById("metricBtn");
+    const imperialBtn = document.getElementById("imperialBtn");
+    if (!metricBtn || !imperialBtn) return;
+
+    metricBtn.classList.toggle("active", !useImperial);
+    imperialBtn.classList.toggle("active", useImperial);
+    metricBtn.setAttribute("aria-pressed", String(!useImperial));
+    imperialBtn.setAttribute("aria-pressed", String(useImperial));
+
+    const unitLabel = document.querySelector(".section-title .unit-switch");
+    if (unitLabel) unitLabel.title = useImperial ? "Auf Celsius und km/h wechseln" : "Auf Fahrenheit und mph wechseln";
+}
+
+function setUnits(imperial) {
+    useImperial = imperial;
+    localStorage.setItem("nordblickUnits", imperial ? "imperial" : "metric");
+    updateUnitSwitch();
+    if (window.__weatherData) {
+        renderCurrentWeather(window.__weatherData);
+        renderForecast(window.__weatherData);
+    }
+}
+
+/* =========================================================
    WEATHER
    ========================================================= */
 
@@ -1052,10 +1275,10 @@ async function loadWeather(lat = DEFAULT_LAT, lon = DEFAULT_LON, city = DEFAULT_
         `?latitude=${lat}` +
         `&longitude=${lon}` +
         "&current=temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m,weather_code" +
-        "&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset" +
+        "&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,wind_speed_10m_max,sunrise,sunset" +
         "&temperature_unit=celsius" +
         "&wind_speed_unit=kmh" +
-        "&timezone=auto&forecast_days=14";
+        "&timezone=auto&forecast_days=7";
 
     try {
         const response = await fetch(url, { cache: "no-store" });
@@ -1065,11 +1288,13 @@ async function loadWeather(lat = DEFAULT_LAT, lon = DEFAULT_LON, city = DEFAULT_
         }
 
         const data = await response.json();
+        window.__weatherData = data;
 
         document.getElementById("location").textContent = city;
 
         renderCurrentWeather(data);
         renderForecast(data);
+        renderWeatherWarning(data);
 
     } catch (error) {
         console.error(error);
@@ -1083,16 +1308,16 @@ function renderCurrentWeather(data) {
     const current = data.current;
 
     document.getElementById("temperature").textContent =
-        `${Math.round(current.temperature_2m)}°`;
+        formatTemperature(current.temperature_2m);
 
     document.getElementById("feelsLike").textContent =
-        `${Math.round(current.apparent_temperature)} °C`;
+        formatTemperature(current.apparent_temperature);
 
     document.getElementById("humidity").textContent =
         `${current.relative_humidity_2m} %`;
 
     document.getElementById("wind").textContent =
-        `${Math.round(current.wind_speed_10m)} km/h`;
+        formatWind(current.wind_speed_10m);
 
     document.getElementById("description").textContent =
         weatherText(current.weather_code);
@@ -1101,6 +1326,50 @@ function renderCurrentWeather(data) {
         weatherIcon(current.weather_code);
 }
 
+
+function renderWeatherWarning(data) {
+    const target = document.getElementById("weatherWarning");
+    if (!target) return;
+
+    const current = data?.current || {};
+    const daily = data?.daily || {};
+    const code = Number(current.weather_code);
+    const wind = Number(current.wind_speed_10m);
+    const rain = Number(daily.precipitation_probability_max?.[0] ?? 0);
+
+    const severeCodes = [95, 96, 99];
+    const strongRainCodes = [65, 82];
+    const snowCodes = [73, 75];
+
+    target.className = "weather-warning";
+
+    if (severeCodes.includes(code)) {
+        target.classList.add("danger");
+        target.innerHTML = "<strong>Gewitter möglich:</strong> Aktuell liegt ein Gewitter-Wettercode vor. Bitte lokale amtliche Warnungen beachten.";
+        return;
+    }
+
+    if (wind >= 60) {
+        target.classList.add("danger");
+        target.innerHTML = `<strong>Starker Wind:</strong> aktuell etwa ${Math.round(wind)} km/h.`;
+        return;
+    }
+
+    if (strongRainCodes.includes(code) || rain >= 80) {
+        target.classList.add("warn");
+        target.innerHTML = `<strong>Starker Regen möglich:</strong> Regenwahrscheinlichkeit heute bis ${Math.round(rain)}%.`;
+        return;
+    }
+
+    if (snowCodes.includes(code)) {
+        target.classList.add("warn");
+        target.innerHTML = "<strong>Schnee:</strong> Es werden winterliche Niederschläge erwartet.";
+        return;
+    }
+
+    target.classList.add("ok");
+    target.innerHTML = "<strong>Keine markante Wetterwarnung:</strong> Aktuell wurden aus den Wetterdaten keine starken Wettererscheinungen erkannt.";
+}
 
 function renderKompakt(data) {
     const daily = data.daily;
@@ -1127,7 +1396,7 @@ function renderKompakt(data) {
         `${daily?.precipitation_probability_max?.[0] ?? "--"} %`;
 
     document.getElementById("maxToday").textContent =
-        `${Math.round(daily?.temperature_2m_max?.[0] ?? 0)} °C`;
+        formatTemperature(daily?.temperature_2m_max?.[0] ?? 0);
 }
 
 function renderForecast(data) {
@@ -1136,7 +1405,7 @@ function renderForecast(data) {
 
     container.innerHTML = "";
 
-    for (let i = 0; i < Math.min(14, daily.time.length); i++) {
+    for (let i = 0; i < Math.min(7, daily.time.length); i++) {
 
         const date = new Date(daily.time[i] + "T12:00:00");
 
@@ -1147,16 +1416,16 @@ function renderForecast(data) {
         const card = document.createElement("div");
         card.className = "forecast-day" + (i === 0 ? " today" : "");
 
+        const maxTemp = formatTemperature(daily.temperature_2m_max[i]);
+        const minTemp = formatTemperature(daily.temperature_2m_min[i]);
+        const wind = formatWind(daily.wind_speed_10m_max?.[i] ?? 0);
+
         card.innerHTML = `
             <div class="day-name">${escapeHtml(dayName)}</div>
             <div class="day-icon">${weatherIcon(daily.weather_code[i])}</div>
-            <div class="day-temp">
-                ${Math.round(daily.temperature_2m_max[i])}° /
-                ${Math.round(daily.temperature_2m_min[i])}°
-            </div>
-            <div class="day-rain">
-                ${daily.precipitation_probability_max[i] ?? 0}% Regen
-            </div>
+            <div class="day-temp">${maxTemp} / ${minTemp}</div>
+            <div class="day-rain">${daily.precipitation_probability_max[i] ?? 0}% Regen</div>
+            <div class="day-wind">Wind ${wind}</div>
         `;
 
         container.appendChild(card);
@@ -1268,12 +1537,60 @@ window.__tagesschauNews = [];
 window.__kielNewsAll = [];
 window.__tagesschauNewsAll = [];
 
+function getTagesschauImage(item) {
+    const variants = item?.teaserImage?.imageVariants;
+
+    if (!variants || typeof variants !== "object") return "";
+
+    // Prefer a 16:9 image because the dashboard displays landscape cards.
+    const preferred = [
+        "16x9-640",
+        "16x9-512",
+        "16x9-384",
+        "16x9-256",
+        "16x9-960",
+        "16x9-1280",
+        "16x9-1920",
+        "1x1-640",
+        "1x1-432",
+        "1x1-256"
+    ];
+
+    for (const key of preferred) {
+        if (typeof variants[key] === "string" && variants[key]) {
+            return variants[key];
+        }
+    }
+
+    return Object.values(variants).find(value =>
+        typeof value === "string" && /^https?:\/\//i.test(value)
+    ) || "";
+}
+
+async function getTagesschauItems() {
+    const response = await fetch(TAGESSCHAU_API, { cache: "no-store" });
+    if (!response.ok) throw new Error("Tagesschau API failed");
+
+    const data = await response.json();
+    const items = Array.isArray(data.news) ? data.news : [];
+
+    return items.map(item => ({
+        title: item.title || item.topline || "Ohne Titel",
+        link: item.shareURL || item.detailsweb || "https://www.tagesschau.de/",
+        date: item.date || "",
+        image: getTagesschauImage(item),
+        alt: item.teaserImage?.alttext || item.title || "Tagesschau"
+    })).filter(item => item.title);
+}
+
 async function loadNews(feedUrl, containerId) {
 
     const container = document.getElementById(containerId);
 
     try {
-        const items = await getRSSItems(feedUrl);
+        const items = containerId === "tagesschauNews"
+            ? await getTagesschauItems()
+            : await getRSSItems(feedUrl);
 
         if (!items.length) {
             throw new Error("No news items");
@@ -1321,9 +1638,11 @@ async function loadNews(feedUrl, containerId) {
             const imageHtml = article.image
                 ? `<img class="news-image"
                         src="${safeUrl(article.image)}"
-                        alt=""
+                        alt="${escapeHtml(article.alt || article.title)}"
                         loading="lazy"
-                        onerror="this.remove()">`
+                        decoding="async"
+                        referrerpolicy="no-referrer"
+                        onerror="this.closest('.news-item')?.classList.add('image-failed'); this.remove();">`
                 : "";
 
             item.innerHTML = `
@@ -1361,7 +1680,7 @@ async function loadTicker() {
     try {
         const [kn, ts] = await Promise.all([
             getRSSItems(KIELER_RSS),
-            getRSSItems(TAGESSCHAU_RSS)
+            getTagesschauItems()
         ]);
 
         const headlines = [
@@ -1418,8 +1737,6 @@ const CURRENCIES = [
 async function loadCurrencies() {
 
     const container = document.getElementById("currencyList");
-    const trendGrid = document.getElementById("trendGrid");
-
     try {
         const latestResponse = await fetch(
             "https://api.frankfurter.dev/v2/rates?base=EUR&quotes=JPY,USD,PLN,MXN",
@@ -1458,99 +1775,9 @@ async function loadCurrencies() {
             container.appendChild(item);
         });
 
-        // Get the available published rates from the last 7 days.
-        const today = new Date();
-        const from = new Date(today);
-        from.setDate(from.getDate() - 7);
-
-        const iso = d => d.toISOString().slice(0, 10);
-
-        const historyResponse = await fetch(
-            `https://api.frankfurter.dev/v2/rates?from=${iso(from)}&to=${iso(today)}&base=EUR&quotes=JPY,USD,PLN,MXN`,
-            { cache: "no-store" }
-        );
-
-        if (!historyResponse.ok) throw new Error("History failed");
-
-        const rows = await historyResponse.json();
-        const series = Object.fromEntries(
-            CURRENCIES.map(c => [c.code, []])
-        );
-
-        (Array.isArray(rows) ? rows : []).forEach(row => {
-            if (series[row.quote] && typeof row.rate === "number") {
-                series[row.quote].push(row.rate);
-            }
-        });
-
-        trendGrid.innerHTML = "";
-
-        CURRENCIES.forEach(currency => {
-            const points = series[currency.code] || [];
-
-            if (points.length < 2) {
-                const item = document.createElement("div");
-                item.className = "trend-item";
-                item.innerHTML = `
-                    <div class="trend-name">EUR → ${currency.code}</div>
-                    <div class="trend-value trend-flat">Noch keine Statistik</div>
-                `;
-                trendGrid.appendChild(item);
-                return;
-            }
-
-            const first = points[0];
-            const last = points[points.length - 1];
-            const change = ((last - first) / first) * 100;
-
-            const min = Math.min(...points);
-            const max = Math.max(...points);
-            const range = max - min || 1;
-            const w = 160, h = 38, pad = 3;
-
-            const pathData = points.map((value, i) => {
-                const x = pad + (i / (points.length - 1)) * (w - pad * 2);
-                const y = h - pad - ((value - min) / range) * (h - pad * 2);
-                return `${i ? "L" : "M"} ${x.toFixed(1)} ${y.toFixed(1)}`;
-            }).join(" ");
-
-            const cls = change > 0.05
-                ? "trend-up"
-                : change < -0.05
-                    ? "trend-down"
-                    : "trend-flat";
-
-            const arrow = change > 0.05
-                ? "↗"
-                : change < -0.05
-                    ? "↘"
-                    : "→";
-
-            const sign = change > 0 ? "+" : "";
-
-            const item = document.createElement("div");
-            item.className = "trend-item";
-            item.innerHTML = `
-                <div class="trend-name">EUR → ${currency.code}</div>
-                <svg class="trend-line ${cls}" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
-                    <path d="${pathData}"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2.5"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"/>
-                </svg>
-                <div class="trend-value ${cls}">
-                    ${arrow} ${sign}${change.toFixed(2)} %
-                </div>
-            `;
-            trendGrid.appendChild(item);
-        });
-
     } catch (error) {
         console.error("Currency error:", error);
         container.innerHTML = `<div class="error">Wechselkurse konnten nicht geladen werden.</div>`;
-        trendGrid.innerHTML = `<div class="error">Statistik konnte nicht geladen werden.</div>`;
     }
 }
 
@@ -1602,6 +1829,10 @@ function updateTicker() {
 }
 
 
+document.getElementById("metricBtn")?.addEventListener("click", () => setUnits(false));
+document.getElementById("imperialBtn")?.addEventListener("click", () => setUnits(true));
+updateUnitSwitch();
+
 /* =========================================================
    REFRESH
    ========================================================= */
@@ -1618,7 +1849,7 @@ async function refreshAll() {
             loadWeather(),
             loadCurrencies(),
             loadNews(KIELER_RSS, "kielerNews"),
-            loadNews(TAGESSCHAU_RSS, "tagesschauNews")
+            loadNews(TAGESSCHAU_API, "tagesschauNews")
         ]);
     } finally {
         button.disabled = false;
@@ -1640,6 +1871,35 @@ refreshAll();
    Automatically refresh every 10 minutes.
 */
 setInterval(refreshAll, 10 * 60 * 1000);
+
+
+function openLegal(section) {
+    const modal = document.getElementById("legalModal");
+    if (!modal) return;
+
+    modal.classList.add("open");
+    modal.setAttribute("aria-hidden", "false");
+
+    document.querySelectorAll(".legal-panel").forEach(panel => {
+        panel.style.display = "none";
+    });
+
+    const target = document.getElementById(section);
+    if (target) target.style.display = "block";
+}
+
+function closeLegal() {
+    const modal = document.getElementById("legalModal");
+    if (!modal) return;
+
+    modal.classList.remove("open");
+    modal.setAttribute("aria-hidden", "true");
+}
+
+document.addEventListener("keydown", event => {
+    if (event.key === "Escape") closeLegal();
+});
+
 
 </script>
 
