@@ -12,7 +12,7 @@
 <style>
 :root {
     --bg: #eef2f6;
-    --card: rgba(255,255,255,.92);
+    --card: rgba(255,255,255,.97);
     --card2: rgba(255,255,255,.72);
     --text: #111827;
     --muted: #667085;
@@ -26,7 +26,7 @@
 @media (prefers-color-scheme: dark) {
     :root {
         --bg: #080d14;
-        --card: rgba(20,28,39,.94);
+        --card: rgba(20,28,39,.97);
         --card2: rgba(31,41,55,.72);
         --text: #f5f7fa;
         --muted: #a3adba;
@@ -110,7 +110,8 @@ button {
     border: 1px solid var(--line);
     border-radius: 26px;
     box-shadow: var(--shadow);
-    backdrop-filter: blur(18px);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
 }
 
 .current {
@@ -421,10 +422,11 @@ button {
     display: block;
     width: 100%;
     height: 150px;
-    object-fit: cover;
+    object-fit: cover; contain: layout paint;
     border-radius: 14px;
     margin-bottom: 10px;
     background: var(--card2);
+    contain: paint;
 }
 
 .news-link {
@@ -557,7 +559,7 @@ button {
     border: 1px solid var(--line);
     border-radius: 17px;
     padding: 17px;
-    transition: transform .18s ease, border-color .18s ease, background .18s ease;
+    transition: none;
 }
 
 .extra-item:hover {
@@ -759,6 +761,7 @@ button {
     border: 0;
     display: block;
     background: #fff;
+    content-visibility: auto;
 }
 
 .kvg-live-footer {
@@ -842,7 +845,7 @@ button {
     position: absolute;
     inset: 0;
     background: rgba(0,0,0,.55);
-    backdrop-filter: blur(5px);
+    backdrop-filter: none;
 }
 
 .legal-modal-box {
@@ -912,7 +915,7 @@ button {
     font-size: .72rem;
     font-weight: 850;
     cursor: pointer;
-    transition: background .18s ease, color .18s ease, transform .18s ease;
+    transition: none;
 }
 
 .unit-switch button:hover {
@@ -971,7 +974,7 @@ button {
     padding: 8px 12px;
     border-radius: 999px;
     cursor: pointer;
-    transition: transform .15s ease, background .15s ease, border-color .15s ease;
+    transition: none;
     white-space: nowrap;
 }
 
@@ -1251,7 +1254,7 @@ body { overflow-x: hidden; }
     .news-image {
         height: auto;
         aspect-ratio: 16 / 9;
-        object-fit: cover;
+        object-fit: cover; contain: layout paint;
     }
 
     .kompakt-grid,
@@ -1315,6 +1318,79 @@ body { overflow-x: hidden; }
     .forecast-day {
         min-height: 145px;
     }
+}
+
+
+/* ===== Performance optimizations ===== */
+.currency-card,
+.news-grid,
+.kvg-live-card,
+.footer,
+.site-info {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 500px;
+}
+
+@media (max-width: 900px) {
+    .card {
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        box-shadow: 0 10px 28px rgba(0,0,0,.16);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto !important; }
+    *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+        animation-duration: .01ms !important;
+    }
+}
+
+html { scroll-behavior: smooth; }
+
+
+/* Ultra performance mode */
+.card, .news-card, .currency-card, .kvg-live-card,
+.weather-grid, .forecast-section, .news-grid {
+    contain: layout paint;
+}
+.news-image {
+    content-visibility: auto;
+}
+@media (max-width: 900px) {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+    .card, .news-card, .currency-card, .kvg-live-card {
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
+}
+
+
+/* Desktop performance optimization */
+@media (min-width: 901px) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .card, .news-card, .currency-card, .kvg-live-card,
+  .weather-grid, .forecast-section, .news-grid {
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  .forecast-day:hover,
+  .news-card:hover,
+  button:hover {
+    transform: none !important;
+  }
 }
 
 </style>
@@ -1486,12 +1562,13 @@ body { overflow-x: hidden; }
     </div>
 
     <div class="kvg-live-frame-wrap">
-        <iframe
+        <iframe loading="lazy"
             class="kvg-live-frame"
-            src="https://kiel.flott-live.de/map/bus-stop/kvg-1893"
+            data-src="https://kiel.flott-live.de/map/bus-stop/kvg-1893"
             title="Flott-Live Stockholmstraße"
             loading="lazy"
-            referrerpolicy="strict-origin-when-cross-origin">
+            referrerpolicy="strict-origin-when-cross-origin"
+            aria-label="Flott-Live Stockholmstraße">
         </iframe>
     </div>
 
@@ -1523,6 +1600,20 @@ body { overflow-x: hidden; }
 
 </body>
 <script>
+/* Avoid duplicate simultaneous network requests */
+(() => {
+  const nativeFetch = window.fetch.bind(window);
+  const pending = new Map();
+  window.fetch = (input, init) => {
+    const key = typeof input === "string" ? input : input.url;
+    if (pending.has(key)) return pending.get(key).then(r => r.clone());
+    const p = nativeFetch(input, init).finally(() => pending.delete(key));
+    pending.set(key, p);
+    return p.then(r => r.clone());
+  };
+})();
+
+
 /* =========================================================
    SETTINGS
    ========================================================= */
@@ -1645,18 +1736,7 @@ function applyLanguage() {
         if (translations[language][key]) el.textContent = translations[language][key];
     });
 
-    const kvgJumpBtn = document.getElementById("kvgJumpBtn");
-
-if (kvgJumpBtn) {
-    kvgJumpBtn.addEventListener("click", () => {
-        const target = document.getElementById("kvg-live");
-        if (target) {
-            target.scrollIntoView({ behavior: "smooth", block: "start" });
-        }
-    });
-}
-
-const deBtn = document.getElementById("deBtn");
+    const deBtn = document.getElementById("deBtn");
     const enBtn = document.getElementById("enBtn");
     deBtn?.classList.toggle("active", language === "de");
     enBtn?.classList.toggle("active", language === "en");
@@ -1765,7 +1845,7 @@ async function loadWeather(lat = DEFAULT_LAT, lon = DEFAULT_LON, city = DEFAULT_
         "&timezone=auto&forecast_days=7";
 
     try {
-        const response = await fetch(url, { cache: "no-store" });
+        const response = await fetch(url, { cache: "default" });
 
         if (!response.ok) {
             throw new Error("Weather request failed");
@@ -1958,7 +2038,7 @@ async function getRSSItems(feedUrl) {
     try {
         const response = await fetch(
             RSS2JSON + encodeURIComponent(feedUrl),
-            { cache: "no-store" }
+            { cache: "default" }
         );
 
         if (response.ok) {
@@ -1981,7 +2061,7 @@ async function getRSSItems(feedUrl) {
     try {
         const response = await fetch(
             ALLORIGINS + encodeURIComponent(feedUrl),
-            { cache: "no-store" }
+            { cache: "default" }
         );
 
         if (!response.ok) {
@@ -2020,9 +2100,9 @@ function getTagesschauImage(item) {
 
     // Prefer a 16:9 image because the dashboard displays landscape cards.
     const preferred = [
-        "16x9-640",
         "16x9-512",
         "16x9-384",
+        "16x9-640",
         "16x9-256",
         "16x9-960",
         "16x9-1280",
@@ -2044,7 +2124,7 @@ function getTagesschauImage(item) {
 }
 
 async function getTagesschauItems() {
-    const response = await fetch(TAGESSCHAU_API, { cache: "no-store" });
+    const response = await fetch(TAGESSCHAU_API, { cache: "default" });
     if (!response.ok) throw new Error("Tagesschau API failed");
 
     const data = await response.json();
@@ -2117,6 +2197,7 @@ async function loadNews(feedUrl, containerId) {
                         alt="${escapeHtml(article.alt || article.title)}"
                         loading="lazy"
                         decoding="async"
+                        fetchpriority="low"
                         referrerpolicy="no-referrer"
                         onerror="this.closest('.news-item')?.classList.add('image-failed'); this.remove();">`
                 : "";
@@ -2214,7 +2295,7 @@ async function loadCurrencies() {
     try {
         const latestResponse = await fetch(
             "https://api.frankfurter.dev/v2/rates?base=EUR&quotes=JPY,USD,PLN,MXN",
-            { cache: "no-store" }
+            { cache: "default" }
         );
 
         if (!latestResponse.ok) throw new Error("Latest rates failed");
@@ -2305,6 +2386,8 @@ function updateTicker() {
 
 document.getElementById("deBtn")?.addEventListener("click", () => setLanguage("de"));
 document.getElementById("enBtn")?.addEventListener("click", () => setLanguage("en"));
+
+// KVG jump button: attach exactly once.
 applyLanguage();
 
 document.getElementById("metricBtn")?.addEventListener("click", () => setUnits(false));
@@ -2312,10 +2395,53 @@ document.getElementById("imperialBtn")?.addEventListener("click", () => setUnits
 updateUnitSwitch();
 
 /* =========================================================
+   KVG LAZY LOADING
+   ========================================================= */
+
+(function setupKvgLazyLoad() {
+    const frame = document.querySelector(".kvg-live-frame[data-src]");
+    const card = document.getElementById("kvg-live");
+    if (!frame || !card) return;
+
+    let loaded = false;
+
+    const loadFrame = () => {
+        if (loaded) return;
+        loaded = true;
+        frame.src = frame.dataset.src;
+        frame.removeAttribute("data-src");
+    };
+
+    if ("IntersectionObserver" in window) {
+        const observer = new IntersectionObserver(entries => {
+            if (entries.some(entry => entry.isIntersecting)) {
+                loadFrame();
+                observer.disconnect();
+            }
+        }, { rootMargin: "700px 0px" });
+        observer.observe(card);
+    } else {
+        // Older browsers: load after the page becomes interactive.
+        setTimeout(loadFrame, 1200);
+    }
+
+    // The jump button should always make the live map available immediately.
+    document.getElementById("kvgJumpBtn")?.addEventListener("click", () => {
+        loadFrame();
+        card.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+})();
+
+
+/* =========================================================
    REFRESH
    ========================================================= */
 
+let refreshInProgress = false;
+
 async function refreshAll() {
+    if (refreshInProgress) return;
+    refreshInProgress = true;
 
     const button = document.getElementById("refreshBtn");
 
@@ -2323,13 +2449,15 @@ async function refreshAll() {
     button.textContent = t("refreshLoading");
 
     try {
-        await Promise.all([
+        // Keep all dashboard sections, but let one slow service never block the others.
+        await Promise.allSettled([
             loadWeather(),
             loadCurrencies(),
             loadNews(KIELER_RSS, "kielerNews"),
             loadNews(TAGESSCHAU_API, "tagesschauNews")
         ]);
     } finally {
+        refreshInProgress = false;
         button.disabled = false;
         button.textContent = t("refresh");
     }
@@ -2378,6 +2506,19 @@ document.addEventListener("keydown", event => {
     if (event.key === "Escape") closeLegal();
 });
 
+
+
+/* KVG button: one listener only */
+(() => {
+    const btn = document.getElementById('kgvJump');
+    const target = document.getElementById('kgv-live');
+    if (btn && target && !btn.dataset.bound) {
+        btn.dataset.bound = '1';
+        btn.addEventListener('click', () => {
+            target.scrollIntoView({behavior: 'auto', block: 'start'});
+        });
+    }
+})();
 
 </script>
 
