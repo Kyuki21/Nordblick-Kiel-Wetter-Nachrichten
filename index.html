@@ -3,7 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kiel Dashboard – Wetter & Nachrichten</title>
+<title>NORDBLICK – Kiel: Wetter, Verkehr & Nachrichten</title>
+<meta name="description" content="NORDBLICK bündelt für Kiel aktuelles Wetter, 7-Tage-Ausblick, KVG-Echtzeit, Nachrichten und Euro-Wechselkurse in einem kompakten Dashboard.">
+<meta name="theme-color" content="#080d14">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://www.nordblick-weatherboard.de/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="NORDBLICK">
+<meta property="og:title" content="NORDBLICK – Kiel: Wetter, Verkehr & Nachrichten">
+<meta property="og:description" content="Dein kompakter Überblick für Wetter, KVG-Echtzeit und Nachrichten aus Kiel und dem Norden.">
+<meta property="og:url" content="https://www.nordblick-weatherboard.de/">
 
     <!-- NORDBLICK Favicon: graues Quadrat mit weißem N -->
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23878d96'/%3E%3Cpath d='M17 48V16h8l22 20V16h8v32h-8L25 28v20z' fill='white'/%3E%3C/svg%3E">
@@ -1393,6 +1402,309 @@ html { scroll-behavior: smooth; }
   }
 }
 
+/* ===== Usability and accessibility improvements ===== */
+.skip-link {
+    position: fixed;
+    left: 16px;
+    top: 12px;
+    z-index: 20;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 800;
+    text-decoration: none;
+    transform: translateY(-160%);
+}
+
+.skip-link:focus {
+    transform: translateY(0);
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.brand {
+    margin: 0;
+}
+
+button:focus-visible,
+a:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 3px;
+}
+
+.quick-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 0 18px;
+}
+
+.quick-nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 8px 13px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--card2);
+    color: var(--text);
+    font-size: .8rem;
+    font-weight: 750;
+    text-decoration: none;
+}
+
+.quick-nav a:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.weather-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    margin-top: 10px;
+    color: var(--muted);
+    font-size: .78rem;
+    line-height: 1.35;
+}
+
+.weather-meta span + span {
+    padding-left: 16px;
+    border-left: 1px solid var(--line);
+}
+
+.weather-warning-card {
+    display: block !important;
+}
+
+.weather-warning-card[hidden] {
+    display: none !important;
+}
+
+.quick-nav + .news-strip {
+    margin-top: 0;
+    margin-bottom: 18px;
+}
+
+#news,
+#rates {
+    margin-top: 18px;
+}
+
+.back-to-top {
+    position: fixed;
+    right: 22px;
+    bottom: 22px;
+    z-index: 10;
+    min-width: 44px;
+    min-height: 44px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--accent);
+    color: #fff;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    font-weight: 850;
+}
+
+.back-to-top[hidden] {
+    display: none;
+}
+
+.language-switch button,
+.unit-switch button,
+.kvg-jump-btn,
+.refresh-btn {
+    min-height: 44px;
+}
+
+@media (max-width: 600px) {
+    .quick-nav {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding-bottom: 4px;
+        scrollbar-width: none;
+    }
+
+    .quick-nav::-webkit-scrollbar {
+        display: none;
+    }
+
+    .quick-nav a {
+        flex: 0 0 auto;
+        min-height: 44px;
+    }
+
+    .weather-meta {
+        font-size: .72rem;
+    }
+
+    .back-to-top {
+        right: 14px;
+        bottom: 14px;
+    }
+}
+
+/* ===== Selected forecast and compact weather status ===== */
+.today-overview {
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+}
+
+.today-overview-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.today-overview-title {
+    font-size: .88rem;
+    font-weight: 850;
+}
+
+.today-overview-head span:last-child {
+    color: var(--muted);
+    font-size: .72rem;
+}
+
+.today-overview .kompakt-item {
+    padding: 12px;
+    border-radius: 14px;
+}
+
+.today-overview .kompakt-value {
+    font-size: 1.08rem;
+}
+
+.weather-warning-card {
+    margin: 12px 0 0;
+    padding: 10px 14px;
+    border-radius: 14px;
+    box-shadow: none !important;
+    background: var(--card2);
+}
+
+.weather-warning-card .weather-warning-head {
+    display: block;
+}
+
+.weather-warning-card .weather-warning-badge {
+    display: none;
+}
+
+.weather-warning-card .weather-warning {
+    margin: 0;
+    padding: 0 0 0 10px;
+    border: 0;
+    border-left: 3px solid rgba(49, 196, 141, .45);
+    border-radius: 0;
+    background: transparent;
+    color: var(--muted);
+    font-size: .76rem;
+}
+
+.weather-warning-card .weather-warning.warn {
+    border-left-color: rgba(245, 158, 11, .7);
+    color: var(--text);
+}
+
+.weather-warning-card .weather-warning.danger {
+    border-left-color: rgba(239, 107, 115, .82);
+    color: var(--text);
+}
+
+.forecast-day {
+    width: 100%;
+    border: 1px solid transparent;
+    background: var(--card2);
+    color: var(--text);
+    cursor: pointer;
+}
+
+.forecast-day:hover {
+    border-color: var(--accent);
+}
+
+.forecast-day.today {
+    outline: 0;
+}
+
+.forecast-day.selected {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+}
+
+.forecast-detail {
+    margin-top: 14px;
+    padding: 14px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: var(--card2);
+}
+
+.forecast-detail-title {
+    font-size: .95rem;
+    font-weight: 850;
+}
+
+.forecast-detail-summary {
+    margin-top: 4px;
+    color: var(--muted);
+    font-size: .8rem;
+}
+
+.forecast-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.forecast-detail-item {
+    min-width: 0;
+    padding: 10px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--card);
+}
+
+.forecast-detail-item span {
+    display: block;
+    color: var(--muted);
+    font-size: .68rem;
+}
+
+.forecast-detail-item strong {
+    display: block;
+    margin-top: 4px;
+    font-size: .84rem;
+}
+
+@media (max-width: 600px) {
+    .today-overview .kompakt-grid,
+    .forecast-detail-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .forecast-detail {
+        padding: 12px;
+    }
+}
+
 </style>
 </head>
 
@@ -1400,14 +1712,16 @@ html { scroll-behavior: smooth; }
 
 <div class="dashboard">
 
+    <a class="skip-link" href="#main-content" data-i18n="skipToContent">Zum Inhalt springen</a>
+
     <header class="header">
         <div>
-            <div class="brand">NORDBLICK</div>
+            <h1 class="brand">NORDBLICK</h1>
             <div class="subtitle" data-i18n="subtitle">Kiel · Weather · News</div>
         </div>
 
         <div class="header-actions">
-            <button type="button" class="kvg-jump-btn" id="kvgJumpBtn" aria-label="KVG Live öffnen">
+            <button type="button" class="kvg-jump-btn" id="kvgJumpBtn" aria-label="KVG Live öffnen" data-i18n-aria="jumpKvgAria">
                 ↓ <span data-i18n="jumpKvg">KVG Live</span>
             </button>
 
@@ -1415,22 +1729,44 @@ html { scroll-behavior: smooth; }
                 <div class="clock" id="clock">--:--</div>
                 <div class="date" id="date">--</div>
             </div>
-            <div class="language-switch" aria-label="Language">
+            <div class="language-switch" aria-label="Sprache" data-i18n-aria="languageSwitch">
                 <button type="button" id="deBtn" class="active" aria-pressed="true">DE</button>
                 <button type="button" id="enBtn" aria-pressed="false">EN</button>
             </div>
         </div>
     </header>
 
+    <nav class="quick-nav" aria-label="Schnellnavigation" data-i18n-aria="quickNav">
+        <a href="#weather" data-i18n="navWeather">Wetter</a>
+        <a href="#kvg-live" data-i18n="navTransit">Abfahrten</a>
+        <a href="#news" data-i18n="navNews">Nachrichten</a>
+        <a href="#rates" data-i18n="navRates">Kurse</a>
+    </nav>
+
+    <div class="news-strip" aria-label="Aktuelle Schlagzeilen" data-i18n-aria="headlineStrip" aria-live="polite">
+        <span class="news-strip-label" data-i18n="headlineLabel">AKTUELL</span>
+        <div class="news-strip-text" id="newsStripText" data-i18n="loadingHeadlines">Schlagzeilen werden geladen …</div>
+    </div>
+
+    <main id="main-content">
+
     <!-- WETTER -->
 
-    <section class="weather-grid">
+    <section class="weather-grid" id="weather" aria-labelledby="weatherTitle">
 
         <div class="card current">
 
+            <h2 class="sr-only" id="weatherTitle" data-i18n="weatherTitle">Aktuelles Wetter für Kiel</h2>
+
             <div class="location-row">
-                <div class="location" id="location">
-                    Kiel, Schleswig-Holstein
+                <div>
+                    <div class="location" id="location">
+                        Kiel, Schleswig-Holstein
+                    </div>
+                    <div class="weather-meta" aria-live="polite">
+                        <span id="weatherUpdated" data-i18n="weatherChecking">Wetterdaten werden geprüft …</span>
+                        <span id="rainNext">--</span>
+                    </div>
                 </div>
 
                 <button class="refresh-btn" id="refreshBtn" type="button" data-i18n="refresh">Refresh</button>
@@ -1468,6 +1804,31 @@ html { scroll-behavior: smooth; }
 
             </div>
 
+            <section class="today-overview" aria-labelledby="todayTitle">
+                <div class="today-overview-head">
+                    <h3 class="today-overview-title" id="todayTitle" data-i18n="todayOverview">Heute im Blick</h3>
+                    <span data-i18n="kielLabel">Kiel</span>
+                </div>
+                <div class="kompakt-grid">
+                    <div class="kompakt-item">
+                        <div class="kompakt-label" data-i18n="sunrise">Sonnenaufgang</div>
+                        <div class="kompakt-value" id="sunrise">--:--</div>
+                    </div>
+                    <div class="kompakt-item">
+                        <div class="kompakt-label" data-i18n="sunset">Sonnenuntergang</div>
+                        <div class="kompakt-value" id="sunset">--:--</div>
+                    </div>
+                    <div class="kompakt-item">
+                        <div class="kompakt-label" data-i18n="rainChance">Regenchance</div>
+                        <div class="kompakt-value" id="rainToday">-- %</div>
+                    </div>
+                    <div class="kompakt-item">
+                        <div class="kompakt-label" data-i18n="dayHigh">Tageshöchstwert</div>
+                        <div class="kompakt-value" id="maxToday">--°</div>
+                    </div>
+                </div>
+            </section>
+
         </div>
 
 
@@ -1475,7 +1836,7 @@ html { scroll-behavior: smooth; }
 
             <div class="section-title">
                 <h2 data-i18n="sevenDay">7-Day Weather</h2>
-                <div class="unit-switch" aria-label="Temperatureinheit und Windgeschwindigkeit">
+                <div class="unit-switch" aria-label="Temperatureinheit und Windgeschwindigkeit" data-i18n-aria="unitSwitch">
                     <button type="button" id="metricBtn" class="active" aria-pressed="true">°C · km/h</button>
                     <button type="button" id="imperialBtn" aria-pressed="false">°F · mph</button>
                 </div>
@@ -1485,32 +1846,59 @@ html { scroll-behavior: smooth; }
                 <div class="loading" data-i18n="loadingWeather">Weather loading...</div>
             </div>
 
+            <div class="forecast-detail" id="forecastDetail" aria-live="polite">
+                <span data-i18n="forecastLoading">Tagesdetails werden geladen …</span>
+            </div>
+
         </div>
 
     </section>
 
-
-
-    <!-- WECHSELKURSE -->
-
-    <section class="card currency-card">
-
-        <div class="section-title">
-            <h2 data-i18n="currencyTitle">Euro Exchange Rates</h2>
-            <span>1 EUR</span>
+    <section class="card weather-warning-card" aria-labelledby="weatherAlertTitle">
+        <div class="weather-warning-head">
+            <h2 class="weather-warning-title sr-only" id="weatherAlertTitle" data-i18n="weatherAlert">Wetterhinweis</h2>
+            <span class="weather-warning-badge" data-i18n="weatherStatus">KIEL</span>
         </div>
-
-        <div class="currency-list" id="currencyList">
-            <div class="loading" data-i18n="loadingRates">Rates loading...</div>
+        <div class="weather-warning" id="weatherWarning" aria-live="polite">
+            <strong data-i18n="weatherChecking">Wetterdaten werden geprüft …</strong>
         </div>
-
-
     </section>
 
+
+
+    <!-- KVG ECHTZEIT -->
+
+    <section class="card kvg-live-card" id="kvg-live">
+        <div class="kvg-live-head">
+            <div>
+                <div class="kvg-live-title" data-i18n="kvgLive">KVG Live</div>
+                <div class="kvg-live-subtitle">Stockholmstraße</div>
+            </div>
+            <div class="kvg-live-badge">FLOTT-LIVE</div>
+        </div>
+
+        <div class="kvg-live-frame-wrap">
+            <iframe
+                class="kvg-live-frame"
+                data-src="https://kiel.flott-live.de/map/bus-stop/kvg-1893"
+                title="Flott-Live Stockholmstraße"
+                loading="lazy"
+                referrerpolicy="strict-origin-when-cross-origin"
+                aria-label="Flott-Live Stockholmstraße">
+            </iframe>
+        </div>
+
+        <div class="kvg-live-footer">
+            <span data-i18n="liveFrom">The live display comes directly from Flott-Live.</span>
+            <a href="https://kiel.flott-live.de/map/bus-stop/kvg-1893" target="_blank" rel="noopener noreferrer">
+                <span data-i18n="openLive">Open Flott-Live in new window →</span>
+            </a>
+        </div>
+    </section>
 
     <!-- NEWS -->
 
-    <section class="news-grid">
+    <section class="news-grid" id="news" aria-label="Nachrichten" data-i18n-aria="newsTitle">
 
         <div class="card news-card">
 
@@ -1546,59 +1934,33 @@ html { scroll-behavior: smooth; }
     </section>
 
 
-    <!-- KVG ECHTZEIT -->
+    <!-- WECHSELKURSE -->
 
-<section class="card kvg-live-card" id="kvg-live">
-
-    <div class="kvg-live-head">
-        <div>
-            <div class="kvg-live-title" data-i18n="kvgLive">KVG Live</div>
-            <div class="kvg-live-subtitle">
-                Stockholmstraße
-            </div>
+    <section class="card currency-card" id="rates" aria-labelledby="ratesTitle">
+        <div class="section-title">
+            <h2 id="ratesTitle" data-i18n="currencyTitle">Euro Exchange Rates</h2>
+            <span>1 EUR</span>
         </div>
-
-        <div class="kvg-live-badge">FLOTT-LIVE</div>
-    </div>
-
-    <div class="kvg-live-frame-wrap">
-        <iframe loading="lazy"
-            class="kvg-live-frame"
-            data-src="https://kiel.flott-live.de/map/bus-stop/kvg-1893"
-            title="Flott-Live Stockholmstraße"
-            loading="lazy"
-            referrerpolicy="strict-origin-when-cross-origin"
-            aria-label="Flott-Live Stockholmstraße">
-        </iframe>
-    </div>
-
-    <div class="kvg-live-footer">
-        <span>
-            <span data-i18n="liveFrom">The live display comes directly from Flott-Live.</span>
-        </span>
-
-        <a
-            href="https://kiel.flott-live.de/map/bus-stop/kvg-1893"
-            target="_blank"
-            rel="noopener noreferrer">
-            <span data-i18n="openLive">Open Flott-Live in new window →</span>
-        </a>
-    </div>
-
-</section>
+        <div class="currency-list" id="currencyList">
+            <div class="loading" data-i18n="loadingRates">Rates loading...</div>
+        </div>
+    </section>
 
 
-<div class="footer">
+    </main>
+
+    <footer class="footer">
         <span data-i18n="footerSources">Weather: Open-Meteo · Exchange rates: Frankfurter API · News: Kiel News RSS · Tagesschau API</span>
-    </div>
+    </footer>
 
     <div class="site-info">
         <span data-i18n="siteInfo">NORDBLICK is your compact information screen for Kiel and northern Germany. The page combines current weather, a 7-day forecast, news from Kiel News and Tagesschau, and current euro exchange rates – all clearly arranged on one page.</span>
     </div>
 
+    <button class="back-to-top" id="backToTop" type="button" hidden aria-label="Nach oben" data-i18n-aria="backToTop">↑</button>
+
 </div>
 
-</body>
 <script>
 /* Avoid duplicate simultaneous network requests */
 (() => {
@@ -1658,7 +2020,51 @@ let language = localStorage.getItem("nordblickLanguage") || "de";
 
 const translations = {
     de: {
-        subtitle: "Kiel · Wetter · Nachrichten",
+        subtitle: "Kiel · Wetter · Verkehr · Nachrichten",
+        metaDescription: "NORDBLICK bündelt für Kiel aktuelles Wetter, 7-Tage-Ausblick, KVG-Echtzeit, Nachrichten und Euro-Wechselkurse in einem kompakten Dashboard.",
+        skipToContent: "Zum Inhalt springen",
+        quickNav: "Schnellnavigation",
+        navWeather: "Wetter",
+        navTransit: "Abfahrten",
+        navNews: "Nachrichten",
+        navRates: "Kurse",
+        backToTop: "Nach oben",
+        headlineStrip: "Aktuelle Schlagzeilen",
+        headlineLabel: "AKTUELL",
+        loadingHeadlines: "Schlagzeilen werden geladen …",
+        weatherTitle: "Aktuelles Wetter für Kiel",
+        weatherChecking: "Wetterdaten werden geprüft …",
+        weatherUpdated: "Aktualisiert",
+        rainNext: "Nächste 2 Std.",
+        rainDry: "Nächste 2 Std.: trocken",
+        rainLikely: "Nächste 2 Std.: bis {chance} % Regen",
+        weatherAlert: "Wetterhinweis",
+        weatherStatus: "KIEL",
+        todayOverview: "Heute im Blick",
+        kielLabel: "Kiel",
+        sunrise: "Sonnenaufgang",
+        sunset: "Sonnenuntergang",
+        rainChance: "Regenchance",
+        dayHigh: "Tageshöchstwert",
+        forecastLoading: "Tagesdetails werden geladen …",
+        forecastHigh: "Höchstwert",
+        forecastLow: "Tiefstwert",
+        forecastWind: "Max. Wind",
+        forecastSunrise: "Sonnenaufgang",
+        forecastSunset: "Sonnenuntergang",
+        alertThunderTitle: "Gewitter möglich",
+        alertThunderText: "Aktuell wird Gewitter gemeldet. Bitte beachte amtliche Warnungen.",
+        alertWindTitle: "Starker Wind",
+        alertWindText: "Aktuell etwa {wind} km/h Wind.",
+        alertRainTitle: "Starker Regen möglich",
+        alertRainText: "Die Regenwahrscheinlichkeit liegt heute bei bis zu {chance} %.",
+        alertSnowTitle: "Schnee möglich",
+        alertSnowText: "Es werden winterliche Niederschläge erwartet.",
+        alertClearTitle: "Keine markante Wetterwarnung",
+        alertClearText: "Die verwendeten Wetterdaten zeigen aktuell keine starken Wettererscheinungen.",
+        jumpKvgAria: "KVG Live öffnen",
+        languageSwitch: "Sprache",
+        unitSwitch: "Temperatureinheit und Windgeschwindigkeit",
         refresh: "Aktualisieren",
         loadingWeather: "Wetter wird geladen...",
         feels: "Gefühlt",
@@ -1689,7 +2095,51 @@ const translations = {
         jumpKvg: "KVG Live"
     },
     en: {
-        subtitle: "Kiel · Weather · News",
+        subtitle: "Kiel · Weather · Transit · News",
+        metaDescription: "NORDBLICK brings together current weather, a 7-day outlook, KVG live departures, news and euro exchange rates for Kiel in one compact dashboard.",
+        skipToContent: "Skip to content",
+        quickNav: "Quick navigation",
+        navWeather: "Weather",
+        navTransit: "Departures",
+        navNews: "News",
+        navRates: "Rates",
+        backToTop: "Back to top",
+        headlineStrip: "Latest headlines",
+        headlineLabel: "LATEST",
+        loadingHeadlines: "Loading headlines …",
+        weatherTitle: "Current weather for Kiel",
+        weatherChecking: "Checking weather data …",
+        weatherUpdated: "Updated",
+        rainNext: "Next 2 hours",
+        rainDry: "Next 2 hours: dry",
+        rainLikely: "Next 2 hours: up to {chance}% rain",
+        weatherAlert: "Weather notice",
+        weatherStatus: "KIEL",
+        todayOverview: "Today at a glance",
+        kielLabel: "Kiel",
+        sunrise: "Sunrise",
+        sunset: "Sunset",
+        rainChance: "Chance of rain",
+        dayHigh: "Today's high",
+        forecastLoading: "Loading day details …",
+        forecastHigh: "High",
+        forecastLow: "Low",
+        forecastWind: "Max wind",
+        forecastSunrise: "Sunrise",
+        forecastSunset: "Sunset",
+        alertThunderTitle: "Thunderstorms possible",
+        alertThunderText: "A thunderstorm weather code is currently reported. Please check official warnings.",
+        alertWindTitle: "Strong wind",
+        alertWindText: "Current wind is around {wind} km/h.",
+        alertRainTitle: "Heavy rain possible",
+        alertRainText: "Today's chance of rain is up to {chance}%.",
+        alertSnowTitle: "Snow possible",
+        alertSnowText: "Wintry precipitation is expected.",
+        alertClearTitle: "No significant weather notice",
+        alertClearText: "The weather data currently shows no strong weather conditions.",
+        jumpKvgAria: "Open KVG Live",
+        languageSwitch: "Language",
+        unitSwitch: "Temperature unit and wind speed",
         refresh: "Refresh",
         loadingWeather: "Weather loading...",
         feels: "Feels like",
@@ -1728,12 +2178,20 @@ function t(key) {
 function applyLanguage() {
     document.documentElement.lang = language;
     document.title = language === "en"
-        ? "Kiel Dashboard – Weather & News"
-        : "Kiel Dashboard – Wetter & Nachrichten";
+        ? "NORDBLICK – Kiel: Weather, Transit & News"
+        : "NORDBLICK – Kiel: Wetter, Verkehr & Nachrichten";
+
+    const description = document.querySelector('meta[name="description"]');
+    if (description) description.content = t("metaDescription");
 
     document.querySelectorAll("[data-i18n]").forEach(el => {
         const key = el.dataset.i18n;
         if (translations[language][key]) el.textContent = translations[language][key];
+    });
+
+    document.querySelectorAll("[data-i18n-aria]").forEach(el => {
+        const key = el.dataset.i18nAria;
+        if (translations[language][key]) el.setAttribute("aria-label", translations[language][key]);
     });
 
     const deBtn = document.getElementById("deBtn");
@@ -1747,7 +2205,10 @@ function applyLanguage() {
     updateUnitSwitch();
     if (window.__weatherData) {
         renderCurrentWeather(window.__weatherData);
+        renderWeatherMeta(window.__weatherData);
+        renderKompakt(window.__weatherData);
         renderForecast(window.__weatherData);
+        renderWeatherWarning(window.__weatherData);
     }
 }
 
@@ -1824,6 +2285,7 @@ function setUnits(imperial) {
     updateUnitSwitch();
     if (window.__weatherData) {
         renderCurrentWeather(window.__weatherData);
+        renderKompakt(window.__weatherData);
         renderForecast(window.__weatherData);
     }
 }
@@ -1839,6 +2301,7 @@ async function loadWeather(lat = DEFAULT_LAT, lon = DEFAULT_LON, city = DEFAULT_
         `?latitude=${lat}` +
         `&longitude=${lon}` +
         "&current=temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m,weather_code" +
+        "&hourly=precipitation_probability,precipitation" +
         "&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,wind_speed_10m_max,sunrise,sunset" +
         "&temperature_unit=celsius" +
         "&wind_speed_unit=kmh" +
@@ -1857,6 +2320,8 @@ async function loadWeather(lat = DEFAULT_LAT, lon = DEFAULT_LON, city = DEFAULT_
         document.getElementById("location").textContent = city;
 
         renderCurrentWeather(data);
+        renderWeatherMeta(data);
+        renderKompakt(data);
         renderForecast(data);
         renderWeatherWarning(data);
 
@@ -1891,6 +2356,54 @@ function renderCurrentWeather(data) {
 }
 
 
+function renderWeatherMeta(data) {
+    const updatedTarget = document.getElementById("weatherUpdated");
+    const rainTarget = document.getElementById("rainNext");
+    const currentTime = data?.current?.time;
+
+    if (updatedTarget) {
+        if (currentTime) {
+            const updated = new Date(currentTime);
+            const formatted = updated.toLocaleTimeString(language === "en" ? "en-US" : "de-DE", {
+                hour: "2-digit",
+                minute: "2-digit"
+            });
+            updatedTarget.textContent = `${t("weatherUpdated")}: ${formatted}`;
+        } else {
+            updatedTarget.textContent = t("weatherChecking");
+        }
+    }
+
+    if (!rainTarget) return;
+
+    const hourly = data?.hourly || {};
+    const start = Array.isArray(hourly.time)
+        ? hourly.time.findIndex(time => time >= currentTime)
+        : -1;
+    const probabilities = start >= 0
+        ? (hourly.precipitation_probability || []).slice(start, start + 2).map(Number).filter(Number.isFinite)
+        : [];
+
+    if (!probabilities.length) {
+        rainTarget.textContent = `${t("rainNext")}: —`;
+        return;
+    }
+
+    const chance = Math.max(...probabilities);
+    rainTarget.textContent = chance < 20
+        ? t("rainDry")
+        : t("rainLikely").replace("{chance}", String(Math.round(chance)));
+}
+
+function setWeatherNotice(target, level, title, message) {
+    target.className = `weather-warning ${level}`;
+    target.replaceChildren();
+
+    const heading = document.createElement("strong");
+    heading.textContent = `${title}:`;
+    target.append(heading, document.createTextNode(` ${message}`));
+}
+
 function renderWeatherWarning(data) {
     const target = document.getElementById("weatherWarning");
     if (!target) return;
@@ -1901,38 +2414,17 @@ function renderWeatherWarning(data) {
     const wind = Number(current.wind_speed_10m);
     const rain = Number(daily.precipitation_probability_max?.[0] ?? 0);
 
-    const severeCodes = [95, 96, 99];
-    const strongRainCodes = [65, 82];
-    const snowCodes = [73, 75];
-
-    target.className = "weather-warning";
-
-    if (severeCodes.includes(code)) {
-        target.classList.add("danger");
-        target.innerHTML = "<strong>Gewitter möglich:</strong> Aktuell liegt ein Gewitter-Wettercode vor. Bitte lokale amtliche Warnungen beachten.";
-        return;
+    if ([95, 96, 99].includes(code)) {
+        setWeatherNotice(target, "danger", t("alertThunderTitle"), t("alertThunderText"));
+    } else if (wind >= 60) {
+        setWeatherNotice(target, "danger", t("alertWindTitle"), t("alertWindText").replace("{wind}", String(Math.round(wind))));
+    } else if ([65, 82].includes(code) || rain >= 80) {
+        setWeatherNotice(target, "warn", t("alertRainTitle"), t("alertRainText").replace("{chance}", String(Math.round(rain))));
+    } else if ([73, 75].includes(code)) {
+        setWeatherNotice(target, "warn", t("alertSnowTitle"), t("alertSnowText"));
+    } else {
+        setWeatherNotice(target, "ok", t("alertClearTitle"), t("alertClearText"));
     }
-
-    if (wind >= 60) {
-        target.classList.add("danger");
-        target.innerHTML = `<strong>Starker Wind:</strong> aktuell etwa ${Math.round(wind)} km/h.`;
-        return;
-    }
-
-    if (strongRainCodes.includes(code) || rain >= 80) {
-        target.classList.add("warn");
-        target.innerHTML = `<strong>Starker Regen möglich:</strong> Regenwahrscheinlichkeit heute bis ${Math.round(rain)}%.`;
-        return;
-    }
-
-    if (snowCodes.includes(code)) {
-        target.classList.add("warn");
-        target.innerHTML = "<strong>Schnee:</strong> Es werden winterliche Niederschläge erwartet.";
-        return;
-    }
-
-    target.classList.add("ok");
-    target.innerHTML = "<strong>Keine markante Wetterwarnung:</strong> Aktuell wurden aus den Wetterdaten keine starken Wettererscheinungen erkannt.";
 }
 
 function renderKompakt(data) {
@@ -1941,7 +2433,7 @@ function renderKompakt(data) {
     if (daily?.sunrise?.[0]) {
         const sunrise = new Date(daily.sunrise[0]);
         document.getElementById("sunrise").textContent =
-            sunrise.toLocaleTimeString("de-DE", {
+            sunrise.toLocaleTimeString(language === "en" ? "en-US" : "de-DE", {
                 hour: "2-digit",
                 minute: "2-digit"
             });
@@ -1950,7 +2442,7 @@ function renderKompakt(data) {
     if (daily?.sunset?.[0]) {
         const sunset = new Date(daily.sunset[0]);
         document.getElementById("sunset").textContent =
-            sunset.toLocaleTimeString("de-DE", {
+            sunset.toLocaleTimeString(language === "en" ? "en-US" : "de-DE", {
                 hour: "2-digit",
                 minute: "2-digit"
             });
@@ -1970,19 +2462,25 @@ function renderForecast(data) {
     container.innerHTML = "";
 
     for (let i = 0; i < Math.min(7, daily.time.length); i++) {
-
         const date = new Date(daily.time[i] + "T12:00:00");
-
         const dayName = i === 0
             ? t("today")
             : date.toLocaleDateString(language === "en" ? "en-US" : "de-DE", { weekday: "short" });
 
-        const card = document.createElement("div");
+        const card = document.createElement("button");
+        card.type = "button";
         card.className = "forecast-day" + (i === 0 ? " today" : "");
+        card.dataset.forecastIndex = String(i);
 
         const maxTemp = formatTemperature(daily.temperature_2m_max[i]);
         const minTemp = formatTemperature(daily.temperature_2m_min[i]);
         const wind = formatWind(daily.wind_speed_10m_max?.[i] ?? 0);
+        const description = weatherText(daily.weather_code[i]);
+
+        card.setAttribute(
+            "aria-label",
+            `${dayName}: ${description}, ${t("forecastHigh")} ${maxTemp}, ${t("forecastLow")} ${minTemp}`
+        );
 
         card.innerHTML = `
             <div class="day-name">${escapeHtml(dayName)}</div>
@@ -1992,8 +2490,68 @@ function renderForecast(data) {
             <div class="day-wind">${t("windPrefix")} ${wind}</div>
         `;
 
+        card.addEventListener("click", () => selectForecastDay(data, i));
+
         container.appendChild(card);
     }
+
+    const selectedIndex = Math.min(
+        Math.max(Number(window.__selectedForecastDay) || 0, 0),
+        Math.min(7, daily.time.length) - 1
+    );
+    selectForecastDay(data, selectedIndex);
+}
+
+function formatForecastTime(value) {
+    if (!value) return "—";
+
+    return new Date(value).toLocaleTimeString(language === "en" ? "en-US" : "de-DE", {
+        hour: "2-digit",
+        minute: "2-digit"
+    });
+}
+
+function selectForecastDay(data, index) {
+    const daily = data?.daily;
+    const detail = document.getElementById("forecastDetail");
+    if (!daily?.time?.[index] || !detail) return;
+
+    window.__selectedForecastDay = index;
+
+    document.querySelectorAll(".forecast-day[data-forecast-index]").forEach(card => {
+        const isSelected = Number(card.dataset.forecastIndex) === index;
+        card.classList.toggle("selected", isSelected);
+        card.setAttribute("aria-pressed", String(isSelected));
+    });
+
+    const date = new Date(daily.time[index] + "T12:00:00");
+    const dayName = index === 0
+        ? t("today")
+        : date.toLocaleDateString(language === "en" ? "en-US" : "de-DE", {
+            weekday: "long",
+            day: "2-digit",
+            month: "long"
+        });
+    const description = weatherText(daily.weather_code?.[index]);
+    const maxTemp = formatTemperature(daily.temperature_2m_max?.[index]);
+    const minTemp = formatTemperature(daily.temperature_2m_min?.[index]);
+    const rainChance = `${daily.precipitation_probability_max?.[index] ?? 0} %`;
+    const wind = formatWind(daily.wind_speed_10m_max?.[index] ?? 0);
+    const sunrise = formatForecastTime(daily.sunrise?.[index]);
+    const sunset = formatForecastTime(daily.sunset?.[index]);
+
+    detail.innerHTML = `
+        <div class="forecast-detail-title">${weatherIcon(daily.weather_code?.[index])} ${escapeHtml(dayName)}</div>
+        <div class="forecast-detail-summary">${escapeHtml(description)}</div>
+        <div class="forecast-detail-grid">
+            <div class="forecast-detail-item"><span>${t("forecastHigh")}</span><strong>${maxTemp}</strong></div>
+            <div class="forecast-detail-item"><span>${t("forecastLow")}</span><strong>${minTemp}</strong></div>
+            <div class="forecast-detail-item"><span>${t("rainChance")}</span><strong>${rainChance}</strong></div>
+            <div class="forecast-detail-item"><span>${t("forecastWind")}</span><strong>${wind}</strong></div>
+            <div class="forecast-detail-item"><span>${t("forecastSunrise")}</span><strong>${sunrise}</strong></div>
+            <div class="forecast-detail-item"><span>${t("forecastSunset")}</span><strong>${sunset}</strong></div>
+        </div>
+    `;
 }
 
 function weatherText(code) {
@@ -2465,6 +3023,20 @@ async function refreshAll() {
 
 document.getElementById("refreshBtn")
     .addEventListener("click", refreshAll);
+
+/* Keep long dashboard pages easy to navigate on phones and tablets. */
+(() => {
+    const button = document.getElementById("backToTop");
+    if (!button) return;
+
+    const updateVisibility = () => {
+        button.hidden = window.scrollY < 500;
+    };
+
+    window.addEventListener("scroll", updateVisibility, { passive: true });
+    button.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+    updateVisibility();
+})();
 
 
 /* =========================================================
