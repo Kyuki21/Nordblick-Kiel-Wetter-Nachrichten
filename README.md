@@ -1,68 +1,80 @@
 # NORDBLICK – Kiel Weather, Traffic & News
 
-**NORDBLICK** is a compact information dashboard for **Kiel, Schleswig-Holstein, Germany**.
+**NORDBLICK** is a web-based information dashboard for **Kiel, Schleswig-Holstein, Germany**.
 
-The website brings important local and general information together in one place — including current weather, forecasts, public transport information, local news, national news, and Euro exchange rates.
+It brings weather, forecasts, public transport, local news, German news, and exchange rates together in one simple and modern interface.
 
 ## 🌐 Live Website
 
 **https://www.nordblick-weatherboard.de**
 
-## 📌 About
+---
 
-NORDBLICK was created as a simple and easy-to-use information screen for Kiel and northern Germany.
+## 📌 About the Project
 
-Instead of checking multiple websites, users can get a quick overview of important information from different sources on a single page.
+NORDBLICK was created to provide a quick overview of important information for Kiel.
+
+Instead of visiting several different websites, users can view multiple types of information from one dashboard.
+
+The project focuses on keeping the interface **simple, fast, and easy to use**.
+
+---
 
 ## ✨ Features
 
 ### 🌦️ Current Weather
 
-- Current weather conditions for Kiel
+- Current temperature
 - Feels-like temperature
 - Humidity
 - Wind speed
-- Sunrise and sunset times
 - Chance of rain
-- Daily high temperature
-- Weather information and updates
+- Sunrise and sunset
+- Daily high and low temperatures
+- Current weather conditions
 
 ### 📅 7-Day Forecast
 
-The dashboard provides a **7-day weather forecast** for Kiel, including daily weather information.
+The dashboard provides a **7-day weather forecast** for Kiel.
 
-Users can switch between:
+Weather units can be displayed using:
 
-- °C / km/h
-- °F / mph
+- Celsius (°C) / kilometers per hour (km/h)
+- Fahrenheit (°F) / miles per hour (mph)
 
-### 🚌 KVG Live
+### 🚌 Public Transport
 
 NORDBLICK includes live public transport information for Kiel.
 
-The dashboard currently provides a live display for:
+The dashboard currently includes information for:
 
 **Stockholmstraße**
 
-The live transport display is provided through **Flott-Live**.
+Public transport information is provided through **Flott-Live**.
 
 ### 📰 Kiel News
 
-The website displays current news from **Kiel News**, allowing users to quickly see local headlines without leaving the dashboard.
+The dashboard displays current local news from Kiel through an RSS feed.
 
-### 🇩🇪 Tagesschau
+This allows users to quickly see recent local headlines without leaving the website.
 
-NORDBLICK also includes national news from **Tagesschau.de** for a broader overview of current events in Germany.
+### 🇩🇪 German News
+
+NORDBLICK also provides German news through **Tagesschau**.
+
+This gives users a broader overview of important news in Germany.
 
 ### 💱 Euro Exchange Rates
 
-The dashboard provides current exchange-rate information based on the Euro (EUR).
+The dashboard provides current currency exchange information based on the Euro (EUR).
 
-This makes it possible to quickly check currency rates without opening a separate exchange-rate website.
+This allows users to quickly check exchange rates directly from the dashboard.
+
+---
 
 ## 🔌 Data Sources
 
-NORDBLICK combines information from several external services:
+NORDBLICK uses several external services to provide its information.
 
 | Information | Source |
 |---|---|
@@ -72,20 +84,26 @@ NORDBLICK combines information from several external services:
 | German News | Tagesschau API |
 | Public Transport | Flott-Live |
 
-The website clearly identifies these sources on the dashboard. citeturn0view0
+Information displayed on NORDBLICK depends on the availability of these external services.
 
-## 🛠️ Technology
+---
 
-NORDBLICK is designed as a lightweight web dashboard and uses web technologies to retrieve and display information from external services.
+## 🛠️ Technologies
 
-### Main technologies
+NORDBLICK is built using standard web technologies.
+
+### Main Technologies
 
 - HTML5
 - CSS3
 - JavaScript
 - REST APIs
 - RSS feeds
-- Responsive web design
+- Responsive Web Design
+
+The project is designed to be lightweight and does not require a complex backend.
+
+---
 
 ## 📂 Project Structure
 
@@ -102,84 +120,108 @@ The main webpage containing the NORDBLICK dashboard.
 
 ### `CNAME`
 
-Contains the custom domain configuration for:
-
-`www.nordblick-weatherboard.de`
+The custom domain configuration for the website.
 
 ### `README.md`
 
-Project documentation and information about NORDBLICK.
+Project documentation.
+
+---
 
 ## 🚀 Running Locally
 
-To run the project locally, clone the repository:
+Clone the repository:
 
 ```bash
 git clone YOUR-REPOSITORY-URL
 ```
 
-Then open the project directory:
+Enter the project directory:
 
 ```bash
 cd Nordblick-Kiel-Wetter-Nachrichten
 ```
 
-Open `index.html` in a modern web browser.
+Then open `index.html` in a modern web browser.
 
-Alternatively, you can use a local development server such as VS Code's **Live Server** extension.
+You can also use a local development server such as **Live Server** in Visual Studio Code.
+
+---
 
 ## 🌍 Deployment
 
-The project is hosted using **GitHub Pages** with a custom domain.
+NORDBLICK is hosted using **GitHub Pages** with a custom domain.
 
-Live website:
+### Live Website
 
-**https://www.nordblick-weatherboard.de**
+https://www.nordblick-weatherboard.de
+
+---
 
 ## 🔄 External Data
 
-Because NORDBLICK relies on external APIs, RSS feeds, and live services, some information may occasionally be unavailable or delayed.
+Some information displayed by NORDBLICK is retrieved from external APIs, RSS feeds, and live services.
 
-The availability and accuracy of external data depend on the respective service providers.
+Because of this, data may occasionally:
+
+- Be temporarily unavailable
+- Be delayed
+- Change depending on the external provider
+- Stop working if an external service changes its API or feed
+
+NORDBLICK does not control the availability of these third-party services.
+
+---
 
 ## 🎯 Project Goal
 
-The goal of NORDBLICK is to create a **simple, fast, and useful information dashboard for Kiel**.
+The goal of NORDBLICK is to create a convenient **all-in-one information dashboard for Kiel**.
 
-The project brings together:
+The project combines:
 
 - Weather
-- Forecasts
+- Weather forecasts
 - Public transport
 - Local news
-- National news
+- German news
 - Currency information
 
-into one compact interface.
+into a single, easy-to-use website.
+
+---
 
 ## 📍 Location
 
 **Kiel, Schleswig-Holstein, Germany**
 
-NORDBLICK focuses primarily on Kiel while also providing selected information relevant to northern Germany and Germany as a whole.
+NORDBLICK primarily focuses on Kiel and the surrounding region while also providing selected information from Germany and international financial data.
 
-## 📄 License
-
-This project is provided for personal and educational purposes.
-
-Third-party services, APIs, news feeds, and data remain subject to their respective terms and licenses.
+---
 
 ## 🙏 Data Providers
 
-Special thanks to the services providing the data used by NORDBLICK:
+NORDBLICK uses information from the following services:
 
 - [Open-Meteo](https://open-meteo.com/) – Weather data
 - [Frankfurter](https://www.frankfurter.app/) – Exchange-rate data
 - [Kiel News](https://www.kn-online.de/) – Local news
 - [Tagesschau](https://www.tagesschau.de/) – German news
-- [Flott-Live](https://kiel.flott-live.de/) – Live transport information
+- [Flott-Live](https://kiel.flott-live.de/) – Public transport information
+
+Please refer to the respective providers for their terms of use and data policies.
 
 ---
 
-**NORDBLICK**  
-*Kiel · Weather · Traffic · News*
+## 📄 License
+
+This project is provided for **personal and educational purposes**.
+
+Third-party data, APIs, RSS feeds, trademarks, and content remain the property of their respective owners and are subject to their respective terms and licenses.
+
+---
+
+## ⭐ NORDBLICK
+
+**Kiel · Weather · Traffic · News**
+
+[Visit NORDBLICK](https://www.nordblick-weatherboard.de/)
