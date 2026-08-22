@@ -133,7 +133,7 @@ Project documentation.
 Clone the repository:
 
 ```bash
-git clone YOUR-REPOSITORY-URL
+git clone https://github.com/Kyuki21/Nordblick-Kiel-Wetter-Nachrichten.git
 ```
 
 Enter the project directory:
